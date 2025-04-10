@@ -300,7 +300,7 @@ nav ul li:hover {
   line-height: 1.6;
 }
 
-/* Modal */
+/* CSS chung cho modal */
 .modal {
   display: none;
   position: fixed;
@@ -308,23 +308,23 @@ nav ul li:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
-  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
   background-color: #fff;
-  width: 350px;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.3s ease;
 }
 
-/* Hiệu ứng mở modal */
 @keyframes slideIn {
   from {
     transform: translateY(-50px);
@@ -336,102 +336,140 @@ nav ul li:hover {
   }
 }
 
-/* Nút đóng modal */
 .close {
   position: absolute;
   top: 10px;
   right: 15px;
   font-size: 24px;
-  color: #666;
   cursor: pointer;
-  transition: color 0.2s;
+  color: #666;
+  transition: color 0.3s;
 }
 
 .close:hover {
-  color: #333;
+  color: #000;
 }
 
-/* Tiêu đề */
 .modal-content h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
   text-align: center;
   margin-bottom: 20px;
-}
-
-/* Form */
-#login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
   color: #555;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .form-group input {
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
   color: #333;
-  outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .form-group input:focus {
+  outline: none;
   border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
-/* Nút Sign In */
-.sign-in-btn {
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+.error-message {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* CSS riêng cho Sign-in */
+#login-modal .modal-content {
+  background-color: #f9f9f9; /* Màu nền nhạt hơn cho Sign-in */
+}
+
+#login-modal .sign-in-btn {
+  width: 100%;
   padding: 12px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #28a745; /* Màu xanh lá cho Sign-in */
   border: none;
   border-radius: 5px;
+  color: #fff;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s;
 }
 
-.sign-in-btn:hover {
-  background-color: #0056b3;
+#login-modal .sign-in-btn:hover {
+  background-color: #218838; /* Màu xanh lá đậm hơn khi hover */
 }
 
-/* Thông báo lỗi */
-.error-message {
-  color: #ff4d4d;
-  font-size: 14px;
+#login-modal .signup-link {
   text-align: center;
-  margin-top: 10px;
-}
-
-/* Liên kết Sign up */
-.signup-link {
-  text-align: center;
+  margin-top: 15px;
   font-size: 14px;
   color: #666;
-  margin-top: 15px;
 }
 
-.signup-link a {
-  color: #007bff;
+#login-modal .signup-link a {
+  color: #28a745; /* Màu xanh lá cho link */
   text-decoration: none;
   font-weight: 500;
 }
 
-.signup-link a:hover {
+#login-modal .signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* CSS riêng cho Sign-up */
+#signup-modal .modal-content {
+  background-color: #fff; /* Màu nền trắng cho Sign-up */
+}
+
+#signup-modal .sign-up-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff; /* Màu xanh dương cho Sign-up */
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#signup-modal .sign-up-btn:hover {
+  background-color: #0056b3; /* Màu xanh dương đậm hơn khi hover */
+}
+
+#signup-modal .signin-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+#signup-modal .signin-link a {
+  color: #007bff; /* Màu xanh dương cho link */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#signup-modal .signin-link a:hover {
   text-decoration: underline;
 }

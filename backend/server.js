@@ -51,53 +51,41 @@ const authenticateToken = (req, res, next) => {
 // API đăng ký người dùng
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
-
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
   try {
+    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    if (rows.length > 0) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-    db.query(query, [username, email, hashedPassword], (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error registering user', error: err });
-      }
-      res.status(201).json({ message: 'User registered successfully' });
-    });
+    const [result] = await db.execute(
+      'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
+      [username, email, hashedPassword, 'reader']
+    );
+    res.status(201).json({ message: 'User registered successfully', user: { id: result.insertId, username, email, role: 'reader' } });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    console.error('Register error:', error);
+    res.status(500).json({ message: 'Error registering user' });
   }
 });
 
 // API đăng nhập người dùng
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
+  try {
+    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    const user = rows[0];
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    const token = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
+    res.json({ 
+      token, 
+      user: { id: user.id, username: user.username, email: user.email, role: user.role } 
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error' });
   }
-
-  const query = 'SELECT * FROM users WHERE email = ?';
-  db.query(query, [email], async (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Server error', error: err });
-    }
-
-    if (results.length === 0) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    const user = results[0];
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
-  });
 });
 
 // API lấy danh sách tiểu thuyết
