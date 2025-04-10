@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novel - Details</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Thanh điều hướng bên trái -->
+    <div class="sidebar">
+      <div class="logo">
+        <img src="assets/images/book-bookmark.png" alt="Book Icon" class="book-icon">
+        <h1>NOVEL</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><span class="icon"><img src="assets/images/home.png" alt="Home Icon"></span> <a href="index.html">Home</a></li>
+          <li><span class="icon"><img src="assets/images/heart.png" alt="Favourites Icon"></span> Favourites</li>
+          <li><span class="icon"><img src="assets/images/clock.png" alt="History Icon"></span> History</li>
+          <li><span class="icon"><img src="assets/images/bookmark.png" alt="Bookmark Icon"></span> Bookmark</li>
+          <li><span class="icon"><img src="assets/images/list.png" alt="Category Icon"></span> Category</li>
+          <li><span class="icon"><img src="assets/images/search.png" alt="Search Icon"></span> Search</li>
+          <li class="profile-item" style="display: none;"><span class="icon"><img src="assets/images/profile.png" alt="Profile Icon"></span> Profile</li>
+        </ul>
+      </nav>
+      <div class="social-links">
+        <a href="#"><img src="assets/images/facebook-icon.png" alt="Facebook"></a>
+        <a href="#"><img src="assets/images/instagram-icon.png" alt="Instagram"></a>
+        <a href="#"><img src="assets/images/youtube-icon.png" alt="YouTube"></a>
+      </div>
+    </div>
+
+    <!-- Phần chính -->
+    <div class="main-content">
+      <div class="header">
+        <div class="search-bar">
+          <input type="text" placeholder="Search...">
+        </div>
+        <div class="auth-buttons">
+          <button class="sign-in">Sign in</button>
+          <button class="sign-up">Sign up</button>
+        </div>
+        <div class="user-info" style="display: none;">
+          <img src="assets/images/avatar.png" alt="User Avatar" class="avatar">
+          <span class="username">Eric Hoffman</span>
+          <button class="sign-out">Sign out</button>
+        </div>
+      </div>
+
+      <!-- Phần thông tin chi tiết -->
+      <section class="novel-details">
+        <div class="novel-header">
+          <img id="novel-cover" src="" alt="Novel Cover" class="novel-cover">
+          <div class="novel-meta">
+            <h1 id="novel-title" class="novel-title"></h1>
+            <p id="novel-author" class="novel-author"></p>
+            <p id="novel-rating" class="novel-rating"></p>
+            <div class="novel-actions" style="display: none;">
+              <button class="add-to-favourites">Add to Favourites</button>
+            </div>
+            <a href="#" class="read-now" id="read-now-link">Read Now</a>
+          </div>
+        </div>
+        <div class="novel-description card">
+          <h2>Description</h2>
+          <p id="novel-description"></p>
+        </div>
+        <div class="chapter-list card">
+          <h2>Chapters</h2>
+          <ul id="chapter-list-items"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/novel.js"></script>
+</body>
+</html>
+
+<script src="js/auth.js"></script>
+<script src="js/novel.js"></script>

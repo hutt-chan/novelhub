@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novel - Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Thanh điều hướng bên trái -->
+    <div class="sidebar">
+      <div class="logo">
+        <img src="assets/images/book-bookmark.png" alt="Book Icon" class="book-icon">
+        <h1>NOVEL</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><span class="icon"><img src="assets/images/home.png" alt="Home Icon"></span> Home</li>
+          <li><span class="icon"><img src="assets/images/heart.png" alt="Favourites Icon"></span> Favourites</li>
+          <li><span class="icon"><img src="assets/images/clock.png" alt="History Icon"></span> History</li>
+          <li><span class="icon"><img src="assets/images/bookmark.png" alt="Bookmark Icon"></span> Bookmark</li>
+          <li><span class="icon"><img src="assets/images/list.png" alt="Category Icon"></span> Category</li>
+          <li><span class="icon"><img src="assets/images/search.png" alt="Search Icon"></span> Search</li>
+          <li class="profile-item" style="display: none;"><span class="icon"><img src="assets/images/profile.png" alt="Profile Icon"></span> Profile</li>
+        </ul>
+      </nav>
+      <div class="social-links">
+        <a href="#"><img src="assets/images/facebook-icon.png" alt="Facebook"></a>
+        <a href="#"><img src="assets/images/instagram-icon.png" alt="Instagram"></a>
+        <a href="#"><img src="assets/images/youtube-icon.png" alt="YouTube"></a>
+      </div>
+    </div>
+
+    <!-- Phần chính -->
+    <div class="main-content">
+      <!-- Thanh tìm kiếm và nút đăng nhập -->
+      <div class="header">
+        <div class="search-bar">
+          <input type="text" placeholder="Search...">
+        </div>
+        <div class="auth-buttons">
+          <button class="sign-in">Sign in</button>
+          <button class="sign-up">Sign up</button>
+        </div>
+        <div class="user-info" style="display: none;">
+          <img src="assets/images/avatar.png" alt="User Avatar" class="avatar">
+          <span class="username">Eric Hoffman</span>
+          <button class="sign-out">Sign out</button>
+        </div>
+      </div>
+
+      <!-- Phần Recommend -->
+      <section class="recommend">
+        <h2 class="recommend-title">Recommend</h2>
+        <div class="novel-grid" id="recommend-grid"></div>
+      </section>
+
+      <!-- Phần New Update -->
+      <section class="new-update">
+        <h2 class="new-update-title">New Update</h2>
+        <div class="novel-grid" id="new-update-grid"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+
+<!-- Thêm modal Sign-in vào cuối body -->
+<div id="login-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close">×</span>
+    <h2>Sign In</h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="sign-in-btn">Sign In</button>
+      <p class="error-message" id="error-message" style="display: none;"></p>
+      <p class="signup-link">Don't have an account? <a href="#" id="signup-link">Sign up</a></p>
+    </form>
+  </div>
+</div>
+
+
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
