@@ -15,8 +15,13 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '123456789', // Thay bằng mật khẩu MySQL của bạn
+  password: '123456789',
   database: 'novel_db'
+});
+
+// Thêm route mặc định cho "/"
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Welcome to the Novel API server!' });
 });
 
 db.connect(err => {
@@ -72,16 +77,21 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-    const user = rows[0];
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    const result = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    console.log('Query result:', result); // Log để kiểm tra
+    
+    if (!result || !Array.isArray(result[0]) || result[0].length === 0) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-    const token = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
-    res.json({ 
-      token, 
-      user: { id: user.id, username: user.username, email: user.email, role: user.role } 
-    });
+
+    const user = result[0][0];
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      const token = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
+      return res.status(200).json({ message: 'Login successful', user: { id: user.id, username: user.username, role: user.role }, token });
+    }
+    
+    res.status(401).json({ message: 'Invalid email or password' });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error' });
@@ -145,3 +155,4 @@ app.get('/novels/:novelId/chapters/:chapterNumber', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
