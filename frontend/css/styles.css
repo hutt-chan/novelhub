@@ -1,25 +1,21 @@
+/* Reset margin và padding cơ bản */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
 }
 
-body {
-  background-color: #f5f5f5;
-}
 
+/* Container chính */
 .container {
   display: flex;
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
-/* Thanh điều hướng bên trái */
+/* Sidebar */
 .sidebar {
   width: 200px;
-  background-color: #e0e7e9;
+  background-color: #E6B2BA; 
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -27,68 +23,62 @@ body {
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-.book-icon {
   width: 30px;
-  height: 30px;
+  height: ;
 }
 
 .logo h1 {
   font-size: 24px;
-  color: #333;
+  font-weight: bold;
+}
+
+.book-icon {
+  width: 30px; 
+  height: 30px;
 }
 
 nav ul {
   list-style: none;
+  margin-top: 30px;
 }
 
 nav ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 0;
-  color: #333;
+  font-size: 16px;
   cursor: pointer;
 }
 
-nav ul li:hover {
-  color: #007bff;
-}
-
-.icon {
-  margin-right: 10px;
-  display: inline-block;
-}
-
-.icon img {
+nav ul li .icon img {
   width: 20px;
   height: 20px;
-  vertical-align: middle;
 }
 
 .social-links {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
-.social-links img {
+.social-links a img {
   width: 24px;
   height: 24px;
 }
 
-/* Phần chính */
+/* Main Content */
 .main-content {
   flex: 1;
+  background-color: #FFF7F3; 
   padding: 20px;
 }
 
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .search-bar input {
@@ -97,26 +87,81 @@ nav ul li:hover {
   border: 1px solid #ccc;
   border-radius: 20px;
   font-size: 16px;
+  outline: none;
+}
+.search-bar input:focus {
+  border-color: #C599B6;     
+  box-shadow: 0 0 5px #C599B6;
+  transition: 0.3s ease;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
 }
 
 .auth-buttons button {
   padding: 8px 20px;
-  margin-left: 10px;
   border: none;
   border-radius: 20px;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 14px;
 }
 
 .sign-in {
-  background-color: #e0e7e9;
+  background-color: #d3e3fd;
   color: #333;
 }
 
 .sign-up {
-  background-color: #e0e7e9;
+  background-color: #ffd6d6;
   color: #333;
 }
+
+/* Novel Grid */
+.novel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.Weekly-Featured, .new-update {
+  margin-bottom: 40px;
+}
+
+.Weekly-Featured-title, .new-update-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 10px;
+    margin-top: 0;
+  }
+
+  .social-links {
+    display: none;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+}
+
 
 .user-info {
   display: flex;
@@ -145,12 +190,12 @@ nav ul li:hover {
   font-size: 14px;
 }
 
-/* Phần Recommend và New Update */
-.recommend, .new-update {
+/* Phần Weekly Featured và New Update */
+.Weekly-Featured, .new-update {
   margin-bottom: 30px;
 }
 
-.recommend h2, .new-update h2 {
+.Weekly-Featured h2, .new-update h2 {
   font-size: 20px;
   margin-bottom: 10px;
   color: #333;
@@ -404,7 +449,7 @@ nav ul li:hover {
 #login-modal .sign-in-btn {
   width: 100%;
   padding: 12px;
-  background-color: #28a745; /* Màu xanh lá cho Sign-in */
+  background-color: #007bff; /* Màu xanh lá cho Sign-in */
   border: none;
   border-radius: 5px;
   color: #fff;
@@ -415,7 +460,7 @@ nav ul li:hover {
 }
 
 #login-modal .sign-in-btn:hover {
-  background-color: #218838; /* Màu xanh lá đậm hơn khi hover */
+  background-color: #0056b3; /* Màu xanh lá đậm hơn khi hover */
 }
 
 #login-modal .signup-link {
@@ -426,7 +471,7 @@ nav ul li:hover {
 }
 
 #login-modal .signup-link a {
-  color: #28a745; /* Màu xanh lá cho link */
+  color: #007bff; /* Màu xanh lá cho link */
   text-decoration: none;
   font-weight: 500;
 }

@@ -1,206 +1,200 @@
-// Hàm hiển thị danh sách tiểu thuyết
-async function displayNovels(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) {
-      console.error(`Container with ID ${containerId} not found`);
-      return;
-    }
-  
+let novels = [];
+
+async function fetchNovels() {
     try {
-      const response = await fetch('http://localhost:3000/novels');
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const novels = await response.json();
-  
-      if (!novels || novels.length === 0) {
-        container.innerHTML = '<p>No novels found.</p>';
+        const response = await fetch('http://localhost:3000/api/novels');
+        novels = await response.json();
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu novels:', error);
+    }
+}
+
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function closeAllModals() {
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
+}
+
+async function toggleBookmark(btn, novelId) {
+    if (!isLoggedIn) {
+        alert('Vui lòng đăng nhập để bookmark!');
         return;
-      }
-  
-      novels.forEach(novel => {
-        const card = document.createElement('a');
-        card.className = 'novel-card';
-        card.href = `novel.html?id=${novel.id}`;
-        card.innerHTML = `
-          <img src="${novel.cover}" alt="${novel.title}">
-          <div class="novel-info">
-            <h3>${novel.title}</h3>
-            <div class="rating">★ ${novel.rating}</div>
-            <div class="author">by ${novel.author}</div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    } catch (error) {
-      console.error('Error fetching novels:', error);
-      container.innerHTML = `<p>Error loading novels: ${error.message}</p>`;
     }
-  }
-  
-  // Thay đổi tiêu đề dựa trên trạng thái đăng nhập
-  function updateTitles() {
-    const recommendTitle = document.querySelector('.recommend-title');
-    const newUpdateTitle = document.querySelector('.new-update-title');
-    const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn')) || false;
-  
-    if (recommendTitle && newUpdateTitle) {
-      if (isLoggedIn) {
-        recommendTitle.textContent = 'Recommended for You';
-        newUpdateTitle.textContent = 'New Updates for You';
-      } else {
-        recommendTitle.textContent = 'Recommend';
-        newUpdateTitle.textContent = 'New Update';
-      }
-    }
-  }
-  //XỬ LÝ FORM SIGN IN
-  // Khai báo các biến ở đầu file để tránh xung đột
-  const signInButton = document.querySelector('.sign-in');
-  const closeButton = document.querySelector('.close');
-  const loginForm = document.getElementById('login-form');
-  
-  // Hiển thị modal khi nhấp vào nút "Sign in"
-  if (signInButton) {
-    signInButton.addEventListener('click', () => {
-      document.getElementById('login-modal').style.display = 'flex';
-    });
-  } else {
-    console.warn('Sign-in button not found in the DOM');
-  }
-  
-  // Đóng modal khi nhấp vào dấu X
-  if (closeButton) {
-    closeButton.addEventListener('click', () => {
-      document.getElementById('login-modal').style.display = 'none';
-      document.getElementById('error-message').style.display = 'none';
-    });
-  } else {
-    console.warn('Close button not found in the DOM');
-  }
-  
-  // Xử lý khi người dùng gửi form đăng nhập
-  if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('error-message');
-  
-      try {
-        const response = await fetch('http://localhost:3000/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        console.log('Response status:', response.status);
-        const data = await response.json();
-        console.log('Response data:', data);
-  
-        if (response.ok) {
-          // Lưu vào localStorage
-          localStorage.setItem('isLoggedIn', JSON.stringify(true));
-          localStorage.setItem('user', JSON.stringify(data.user));
-          localStorage.setItem('role', JSON.stringify(data.user.role));
-          // Log để kiểm tra
-          console.log('Stored isLoggedIn:', localStorage.getItem('isLoggedIn'));
-          console.log('Stored user:', localStorage.getItem('user'));
-          console.log('Stored role:', localStorage.getItem('role'));
-          // Đóng modal và cập nhật giao diện
-          document.getElementById('login-modal').style.display = 'none';
-          updateAuthUI();
-          updateTitles();
-        } else {
-          errorMessage.textContent = data.message || 'Đăng nhập thất bại';
-          errorMessage.style.display = 'block';
-        }
-      } catch (error) {
-        console.error('Sign-in error:', error);
-        errorMessage.textContent = 'Có lỗi xảy ra khi đăng nhập';
-        errorMessage.style.display = 'block';
-      }
-    });
-  }
-  
-  // Hiển thị tiểu thuyết và cập nhật giao diện
-  displayNovels('recommend-grid');
-  displayNovels('new-update-grid');
-  updateTitles();
 
- //XỬ LÍ FORM SIGN UP
- // Khai báo các biến liên quan đến Sign-up
-const signUpButton = document.querySelector('.sign-up');
-const signupForm = document.getElementById('signup-form');
-const signupLink = document.getElementById('signup-link');
-const signinLink = document.getElementById('signin-link');
-const closeButtons = document.querySelectorAll('.close');
-
-// Mở modal Sign-up khi nhấp nút "Sign up"
-if (signUpButton) {
-  signUpButton.addEventListener('click', () => {
-    document.getElementById('signup-modal').style.display = 'flex';
-  });
-}
-
-// Chuyển từ Sign-in sang Sign-up
-if (signupLink) {
-  signupLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('login-modal').style.display = 'none';
-    document.getElementById('signup-modal').style.display = 'flex';
-  });
-}
-
-// Chuyển từ Sign-up sang Sign-in
-if (signinLink) {
-  signinLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('signup-modal').style.display = 'none';
-    document.getElementById('login-modal').style.display = 'flex';
-  });
-}
-
-// Đóng modal khi nhấp vào nút "X"
-closeButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    document.getElementById('login-modal').style.display = 'none';
-    document.getElementById('signup-modal').style.display = 'none';
-    const errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(msg => (msg.style.display = 'none'));
-  });
-});
-
-// Xử lý form Sign-up
-if (signupForm) {
-  signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('signup-username').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    const errorMessage = document.getElementById('signup-error-message');
-
+    const isBookmarked = btn.classList.contains('active');
     try {
-      const response = await fetch('http://localhost:3000/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Đăng ký thành công! Vui lòng đăng nhập.');
-        signupForm.reset(); // Xóa form
-        document.getElementById('signup-modal').style.display = 'none';
-        document.getElementById('login-modal').style.display = 'flex';
-      } else {
-        errorMessage.textContent = data.message || 'Đăng ký thất bại';
-        errorMessage.style.display = 'block';
-      }
+        if (isBookmarked) {
+            await fetch(`http://localhost:3000/api/bookmarks/${novelId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+            btn.classList.remove('active');
+            btn.querySelector('i').classList.replace('fas', 'far');
+        } else {
+            await fetch('http://localhost:3000/api/bookmarks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ novel_id: novelId })
+            });
+            btn.classList.add('active');
+            btn.querySelector('i').classList.replace('far', 'fas');
+        }
     } catch (error) {
-      console.error('Sign-up error:', error);
-      errorMessage.textContent = 'Có lỗi xảy ra khi đăng ký';
-      errorMessage.style.display = 'block';
+        alert('Lỗi khi cập nhật bookmark. Vui lòng thử lại.');
     }
-  });
 }
+
+function openNovelModal(novelId) {
+    const novel = novels.find(n => n.id == novelId);
+    
+    if (!novel) return;
+    
+    const novelModal = document.getElementById('novelModal');
+    novelModal.setAttribute('data-novel-id', novelId);
+    novelModal.querySelector('.modal-title').textContent = novel.title;
+    novelModal.querySelector('.modal-cover').style.backgroundImage = `url('${novel.coverUrl}')`;
+    novelModal.querySelector('.modal-author').textContent = `By ${novel.author}`;
+    novelModal.querySelector('.view-count').textContent = novel.views;
+    novelModal.querySelector('.rating').textContent = novel.rating;
+    novelModal.querySelector('.chapter-count').textContent = novel.chapterCount;
+    novelModal.querySelector('.modal-description').textContent = novel.description;
+    
+    const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
+    const bookmarkBtn = novelCard.querySelector('.bookmark-btn');
+    const bookmarkModalBtn = novelModal.querySelector('.bookmark-modal-btn');
+    
+    if (bookmarkBtn.classList.contains('active')) {
+        bookmarkModalBtn.innerHTML = '<i class="fas fa-bookmark"></i> Xóa Bookmark';
+    } else {
+        bookmarkModalBtn.innerHTML = '<i class="far fa-bookmark"></i> Thêm Bookmark';
+    }
+    
+    const genresContainer = novelModal.querySelector('.modal-genres');
+    genresContainer.innerHTML = '';
+    novel.genres.forEach(genre => {
+        const genreTag = document.createElement('div');
+        genreTag.className = 'genre-tag';
+        genreTag.textContent = genre;
+        genresContainer.appendChild(genreTag);
+    });
+    
+    const chapterList = novelModal.querySelector('.chapter-list');
+    chapterList.innerHTML = '';
+    novel.chapters.forEach(chapter => {
+        const chapterItem = document.createElement('div');
+        chapterItem.className = 'chapter-item';
+        chapterItem.innerHTML = `
+            <div class="chapter-name">${chapter.name}</div>
+            <div class="chapter-date">${chapter.date}</div>
+        `;
+        chapterList.appendChild(chapterItem);
+    });
+    
+    openModal('novelModal');
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await fetchNovels();
+    await initAuth();
+
+    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const novelId = this.closest('.novel-card').getAttribute('data-id');
+            toggleBookmark(this, novelId);
+        });
+    });
+
+    const novelModal = document.getElementById('novelModal');
+    const novelModalClose = novelModal.querySelector('.modal-close');
+    const bookmarkModalBtn = novelModal.querySelector('.bookmark-modal-btn');
+
+    novelModalClose.addEventListener('click', () => closeModal('novelModal'));
+
+    novelModal.addEventListener('click', function(e) {
+        if (e.target === novelModal) {
+            closeModal('novelModal');
+        }
+    });
+
+    bookmarkModalBtn.addEventListener('click', async function() {
+        const novelId = novelModal.getAttribute('data-novel-id');
+        const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
+        const bookmarkBtn = novelCard.querySelector('.bookmark-btn');
+        
+        await toggleBookmark(bookmarkBtn, novelId);
+        
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('far')) {
+            this.innerHTML = '<i class="fas fa-bookmark"></i> Xóa Bookmark';
+        } else {
+            this.innerHTML = '<i class="far fa-bookmark"></i> Thêm Bookmark';
+        }
+    });
+
+    document.querySelectorAll('.novel-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const novelId = this.getAttribute('data-id');
+            openNovelModal(novelId);
+        });
+    });
+
+    document.querySelectorAll('.auth-modal .modal-close').forEach(btn => {
+        btn.addEventListener('click', closeAllModals);
+    });
+
+    document.querySelectorAll('.auth-modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeAllModals();
+            }
+        });
+    });
+
+    document.getElementById('switchToSignup').addEventListener('click', () => {
+        closeModal('signinModal');
+        openModal('signupModal');
+    });
+
+    document.getElementById('switchToSignin').addEventListener('click', () => {
+        closeModal('signupModal');
+        openModal('signinModal');
+    });
+
+    document.getElementById('signinForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('signinEmail').value;
+        const password = document.getElementById('signinPassword').value;
+        await signIn(email, password);
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('signupUsername').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('signupConfirmPassword').value;
+        await signUp(username, email, password, confirmPassword);
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            document.querySelector('.nav-link.active')?.classList.remove('active');
+            this.classList.add('active');
+        });
+    });
+});

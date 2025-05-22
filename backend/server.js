@@ -1,158 +1,309 @@
+require('dotenv').config();
 const express = require('express');
-const mysql = require('mysql2');
-const cors = require('cors');
-const jwt = require('jsonwebtoken');
+const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const app = express();
-const port = 3000;
-
-// Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-// Kết nối MySQL
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '123456789',
-  database: 'novel_db'
-});
-
-// Thêm route mặc định cho "/"
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Welcome to the Novel API server!' });
-});
-
-db.connect(err => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-    return;
-  }
-  console.log('Connected to MySQL');
-});
-
-// Secret key cho JWT
-const JWT_SECRET = 'your_jwt_secret_key';
-
-// Middleware để kiểm tra token
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Token required' });
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid token' });
-    }
-    req.user = user;
-    next();
-  });
+const dbConfig = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 };
 
-// API đăng ký người dùng
-app.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-    if (rows.length > 0) {
-      return res.status(400).json({ message: 'Email already exists' });
+const JWT_SECRET = process.env.JWT_SECRET;
+
+async function connectDB() {
+    return await mysql.createConnection(dbConfig);
+}
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.status(401).json({ error: 'Token không hợp lệ' });
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ error: 'Token không hợp lệ' });
+        req.user = user;
+        next();
+    });
+}
+
+function restrictTo(roles) {
+    return (req, res, next) => {
+        if (!req.user || !roles.includes(req.user.role)) {
+            return res.status(403).json({ error: 'Không có quyền truy cập' });
+        }
+        next();
+    };
+}
+
+async function logAction(userId, action) {
+    try {
+        const db = await connectDB();
+        await db.execute('INSERT INTO Logs (user_id, action) VALUES (?, ?)', [userId, action]);
+    } catch (error) {
+        console.error('Lỗi khi ghi log:', error);
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const [result] = await db.execute(
-      'INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)',
-      [username, email, hashedPassword, 'reader']
-    );
-    res.status(201).json({ message: 'User registered successfully', user: { id: result.insertId, username, email, role: 'reader' } });
-  } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).json({ message: 'Error registering user' });
-  }
+}
+
+app.post('/api/register', async (req, res) => {
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+        return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin' });
+    }
+
+    try {
+        const db = await connectDB();
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await db.execute(
+            'INSERT INTO Users (username, email, password, role) VALUES (?, ?, ?, ?)',
+            [username, email, hashedPassword, 'user']
+        );
+        res.status(201).json({ message: 'Đăng ký thành công' });
+    } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.status(400).json({ error: 'Username hoặc email đã tồn tại' });
+        } else {
+            res.status(500).json({ error: 'Lỗi server' });
+        }
+    }
 });
 
-// API đăng nhập người dùng
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const result = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-    console.log('Query result:', result); // Log để kiểm tra
-    
-    if (!result || !Array.isArray(result[0]) || result[0].length === 0) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin' });
     }
 
-    const user = result[0][0];
-    const match = await bcrypt.compare(password, user.password);
-    if (match) {
-      const token = jwt.sign({ id: user.id, role: user.role }, 'your_jwt_secret', { expiresIn: '1h' });
-      return res.status(200).json({ message: 'Login successful', user: { id: user.id, username: user.username, role: user.role }, token });
+    try {
+        const db = await connectDB();
+        const [rows] = await db.execute('SELECT * FROM Users WHERE email = ?', [email]);
+        const user = rows[0];
+        if (!user) {
+            return res.status(401).json({ error: 'Email hoặc mật khẩu không đúng' });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.status(401).json({ error: 'Email hoặc mật khẩu không đúng' });
+        }
+
+        const token = jwt.sign({ id: user.id, username: user.username, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token, user: { id: user.id, username: user.username, email: user.email, role: user.role } });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi server' });
     }
-    
-    res.status(401).json({ message: 'Invalid email or password' });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
 });
 
-// API lấy danh sách tiểu thuyết
-app.get('/novels', (req, res) => {
-  const query = 'SELECT * FROM novels';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error fetching novels', error: err });
-    }
-    res.json(results);
-  });
+app.get('/api/user', authenticateToken, async (req, res) => {
+    res.json({ user: req.user });
 });
 
-// API lấy chi tiết tiểu thuyết
-app.get('/novels/:id', (req, res) => {
-  const { id } = req.params;
-  const query = 'SELECT * FROM novels WHERE id = ?';
-  db.query(query, [id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error fetching novel', error: err });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'Novel not found' });
-    }
-    res.json(results[0]);
-  });
+app.post('/api/logout', (req, res) => {
+    res.json({ message: 'Đăng xuất thành công' });
 });
 
-// API lấy danh sách chương của một tiểu thuyết
-app.get('/novels/:id/chapters', (req, res) => {
-  const { id } = req.params;
-  const query = 'SELECT chapter_number, title FROM chapters WHERE novel_id = ? ORDER BY chapter_number';
-  db.query(query, [id], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error fetching chapters', error: err });
+app.get('/api/novels', async (req, res) => {
+    try {
+        const db = await connectDB();
+        const [novels] = await db.execute(`
+            SELECT n.id, n.title, n.author, n.views, n.rating, n.coverUrl, n.description, n.chapterCount,
+                   GROUP_CONCAT(g.name) AS genres
+            FROM Novels n
+            LEFT JOIN NovelGenres ng ON n.id = ng.novel_id
+            LEFT JOIN Genres g ON ng.genre_id = g.id
+            GROUP BY n.id
+        `);
+        const [chapters] = await db.execute(`
+            SELECT c.novel_id, c.name, c.date
+            FROM Chapters c
+            ORDER BY c.id DESC
+        `);
+
+        const result = novels.map(novel => ({
+            ...novel,
+            genres: novel.genres ? novel.genres.split(',') : [],
+            chapters: chapters.filter(ch => ch.novel_id == novel.id)
+        }));
+
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi lấy dữ liệu novels' });
     }
-    res.json(results);
-  });
 });
 
-// API lấy nội dung một chương
-app.get('/novels/:novelId/chapters/:chapterNumber', (req, res) => {
-  const { novelId, chapterNumber } = req.params;
-  const query = 'SELECT * FROM chapters WHERE novel_id = ? AND chapter_number = ?';
-  db.query(query, [novelId, chapterNumber], (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error fetching chapter', error: err });
+app.post('/api/novels', authenticateToken, restrictTo(['admin']), async (req, res) => {
+    const { id, title, author, views, rating, coverUrl, description, chapterCount, genres } = req.body;
+    if (!id || !title || !author) {
+        return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin' });
     }
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'Chapter not found' });
+
+    try {
+        const db = await connectDB();
+        await db.execute(
+            'INSERT INTO Novels (id, title, author, views, rating, coverUrl, description, chapterCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [id, title, author, views || '0', rating || 0, coverUrl, description, chapterCount || 0]
+        );
+
+        if (genres && genres.length > 0) {
+            for (const genre of genres) {
+                let [genreRows] = await db.execute('SELECT id FROM Genres WHERE name = ?', [genre]);
+                let genreId = genreRows[0]?.id;
+                if (!genreId) {
+                    [genreRows] = await db.execute('INSERT INTO Genres (name) VALUES (?)', [genre]);
+                    genreId = genreRows.insertId;
+                }
+                await db.execute('INSERT INTO NovelGenres (novel_id, genre_id) VALUES (?, ?)', [id, genreId]);
+            }
+        }
+
+        await logAction(req.user.id, `Thêm tiểu thuyết: ${title}`);
+        res.status(201).json({ message: 'Thêm tiểu thuyết thành công' });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi thêm tiểu thuyết' });
     }
-    res.json(results[0]);
-  });
 });
 
-// Khởi động server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+app.put('/api/novels/:id', authenticateToken, restrictTo(['admin']), async (req, res) => {
+    const { id } = req.params;
+    const { title, author, views, rating, coverUrl, description, chapterCount, genres } = req.body;
+
+    try {
+        const db = await connectDB();
+        await db.execute(
+            'UPDATE Novels SET title = ?, author = ?, views = ?, rating = ?, coverUrl = ?, description = ?, chapterCount = ? WHERE id = ?',
+            [title, author, views, rating, coverUrl, description, chapterCount, id]
+        );
+
+        if (genres && genres.length > 0) {
+            await db.execute('DELETE FROM NovelGenres WHERE novel_id = ?', [id]);
+            for (const genre of genres) {
+                let [genreRows] = await db.execute('SELECT id FROM Genres WHERE name = ?', [genre]);
+                let genreId = genreRows[0]?.id;
+                if (!genreId) {
+                    [genreRows] = await db.execute('INSERT INTO Genres (name) VALUES (?)', [genre]);
+                    genreId = genreRows.insertId;
+                }
+                await db.execute('INSERT INTO NovelGenres (novel_id, genre_id) VALUES (?, ?)', [id, genreId]);
+            }
+        }
+
+        await logAction(req.user.id, `Sửa tiểu thuyết: ${title}`);
+        res.json({ message: 'Cập nhật tiểu thuyết thành công' });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi cập nhật tiểu thuyết' });
+    }
 });
 
+app.delete('/api/novels/:id', authenticateToken, restrictTo(['admin']), async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const db = await connectDB();
+        const [novels] = await db.execute('SELECT title FROM Novels WHERE id = ?', [id]);
+        if (!novels[0]) {
+            return res.status(404).json({ error: 'Tiểu thuyết không tồn tại' });
+        }
+
+        await db.execute('DELETE FROM NovelGenres WHERE novel_id = ?', [id]);
+        await db.execute('DELETE FROM Chapters WHERE novel_id = ?', [id]);
+        await db.execute('DELETE FROM Bookmarks WHERE novel_id = ?', [id]);
+        await db.execute('DELETE FROM Novels WHERE id = ?', [id]);
+
+        await logAction(req.user.id, `Xóa tiểu thuyết: ${novels[0].title}`);
+        res.json({ message: 'Xóa tiểu thuyết thành công' });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi xóa tiểu thuyết' });
+    }
+});
+
+app.get('/api/admin/users', authenticateToken, restrictTo(['admin']), async (req, res) => {
+    try {
+        const db = await connectDB();
+        const [users] = await db.execute('SELECT id, username, email, role, created_at FROM Users');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi lấy danh sách người dùng' });
+    }
+});
+
+app.put('/api/admin/users/:id', authenticateToken, restrictTo(['admin']), async (req, res) => {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!['user', 'admin'].includes(role)) {
+        return res.status(400).json({ error: 'Vai trò không hợp lệ' });
+    }
+
+    try {
+        const db = await connectDB();
+        if (role === 'admin') {
+            const [adminCount] = await db.execute('SELECT COUNT(*) as count FROM Users WHERE role = ?', ['admin']);
+            if (adminCount[0].count >= 3) {
+                return res.status(403).json({ error: 'Đã đạt tối đa 3 tài khoản admin' });
+            }
+        }
+
+        await db.execute('UPDATE Users SET role = ? WHERE id = ?', [role, id]);
+        await logAction(req.user.id, `Thay đổi vai trò người dùng ID ${id} thành ${role}`);
+        res.json({ message: 'Cập nhật vai trò thành công' });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi cập nhật vai trò' });
+    }
+});
+
+app.post('/api/bookmarks', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
+    const { novel_id } = req.body;
+    if (!novel_id) {
+        return res.status(400).json({ error: 'Vui lòng cung cấp novel_id' });
+    }
+
+    try {
+        const db = await connectDB();
+        await db.execute('INSERT INTO Bookmarks (user_id, novel_id) VALUES (?, ?)', [req.user.id, novel_id]);
+        res.status(201).json({ message: 'Thêm bookmark thành công' });
+    } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.status(400).json({ error: 'Bookmark đã tồn tại' });
+        } else {
+            res.status(500).json({ error: 'Lỗi khi thêm bookmark' });
+        }
+    }
+});
+
+app.delete('/api/bookmarks/:novel_id', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
+    const { novel_id } = req.params;
+
+    try {
+        const db = await connectDB();
+        await db.execute('DELETE FROM Bookmarks WHERE user_id = ? AND novel_id = ?', [req.user.id, novel_id]);
+        res.json({ message: 'Xóa bookmark thành công' });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi xóa bookmark' });
+    }
+});
+
+app.get('/api/bookmarks', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
+    try {
+        const db = await connectDB();
+        const [bookmarks] = await db.execute(`
+            SELECT n.id, n.title, n.author, n.views, n.rating, n.coverUrl, n.description, n.chapterCount
+            FROM Bookmarks b
+            JOIN Novels n ON b.novel_id = n.id
+            WHERE b.user_id = ?
+        `, [req.user.id]);
+        res.json(bookmarks);
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi khi lấy danh sách bookmark' });
+    }
+});
+
+app.listen(3000, () => {
+    console.log('Server chạy tại http://localhost:3000');
+});

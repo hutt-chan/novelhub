@@ -1,124 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Novel - Home</title>
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novel - Home</title>
+    <link rel="stylesheet" href="css/test.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <!-- Thanh điều hướng bên trái -->
+    <!-- Sidebar -->
     <div class="sidebar">
-      <div class="logo">
-        <img src="assets/images/book-bookmark.png" alt="Book Icon" class="book-icon">
-        <h1>NOVEL</h1>
-      </div>
-      <nav>
-        <ul>
-          <li><span class="icon"><img src="assets/images/home.png" alt="Home Icon"></span> Home</li>
-          <li><span class="icon"><img src="assets/images/heart.png" alt="Favourites Icon"></span> Favourites</li>
-          <li><span class="icon"><img src="assets/images/clock.png" alt="History Icon"></span> History</li>
-          <li><span class="icon"><img src="assets/images/bookmark.png" alt="Bookmark Icon"></span> Bookmark</li>
-          <li><span class="icon"><img src="assets/images/list.png" alt="Category Icon"></span> Category</li>
-          <li><span class="icon"><img src="assets/images/search.png" alt="Search Icon"></span> Search</li>
-          <li class="profile-item" style="display: none;"><span class="icon"><img src="assets/images/profile.png" alt="Profile Icon"></span> Profile</li>
-          <li><span class="icon"><img src="assets/images/moon.png" alt="Admin Icon"></span>Manage Novels</li>
-        </ul>
-      </nav>
-      <div class="social-links">
-        <a href="#"><img src="assets/images/facebook-icon.png" alt="Facebook"></a>
-        <a href="#"><img src="assets/images/instagram-icon.png" alt="Instagram"></a>
-        <a href="#"><img src="assets/images/youtube-icon.png" alt="YouTube"></a>
-      </div>
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <span>NovelHub</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-list"></i>
+                <span>Categories</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
     </div>
 
-    <!-- Phần chính -->
+    <!-- Main Content -->
     <div class="main-content">
-      <!-- Thanh tìm kiếm và nút đăng nhập -->
-      <div class="header">
-        <div class="search-bar">
-          <input type="text" placeholder="Search...">
+        <!-- Auth Buttons -->
+        <div class="auth-container" id="authContainer">
+            <!-- Will be populated by JS -->
         </div>
-        <div class="auth-buttons">
-          <button class="sign-in">Sign in</button>
-          <button class="sign-up">Sign up</button>
-        </div>
-        <div class="user-info" style="display: none;">
-          <img src="assets/images/avatar.png" alt="User Avatar" class="avatar">
-          <span class="username">Eric Hoffman</span>
-          <button class="sign-out">Sign out</button>
-        </div>
-      </div>
 
-      <!-- Phần Recommend -->
-      <section class="recommend">
-        <h2 class="recommend-title">Recommend</h2>
-        <div class="novel-grid" id="recommend-grid"></div>
-      </section>
+        <!-- Search Bar -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" placeholder="Search for novels, authors, or genres...">
+        </div>
 
-      <!-- Phần New Update -->
-      <section class="new-update">
-        <h2 class="new-update-title">New Update</h2>
-        <div class="novel-grid" id="new-update-grid"></div>
-      </section>
+        <!-- Weekly Featured Section -->
+        <h2 class="section-title">
+            <i class="fas fa-star"></i>
+            Weekly Featured
+        </h2>
+        <div class="novel-grid">
+            <!-- Novel Card 1 -->
+            <div class="novel-card" data-id="1">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/3498db/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">The Silent Guardian</h3>
+                    <p class="novel-author">By Sarah Johnson</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 12.5k</span>
+                        <span><i class="fas fa-star"></i> 4.8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 2 -->
+            <div class="novel-card" data-id="2">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/2ecc71/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Echoes of Eternity</h3>
+                    <p class="novel-author">By Michael Chen</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 9.8k</span>
+                        <span><i class="fas fa-star"></i> 4.6</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 3 -->
+            <div class="novel-card" data-id="3">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/9b59b6/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Whispers in the Dark</h3>
+                    <p class="novel-author">By Elena Rodriguez</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 7.3k</span>
+                        <span><i class="fas fa-star"></i> 4.5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 4 -->
+            <div class="novel-card" data-id="4">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/f1c40f/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Chronicles of the Forgotten Realm</h3>
+                    <p class="novel-author">By James Wilson</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 5.2k</span>
+                        <span><i class="fas fa-star"></i> 4.7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Updates Section -->
+        <h2 class="section-title">
+            <i class="fas fa-clock"></i>
+            New Updates
+        </h2>
+        <div class="novel-grid">
+            <!-- Novel Card 5 -->
+            <div class="novel-card" data-id="5">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/e74c3c/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">The Last Sorcerer</h3>
+                    <p class="novel-author">By Thomas Wright</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 8.7k</span>
+                        <span><i class="fas fa-star"></i> 4.4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 6 -->
+            <div class="novel-card" data-id="6">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/1abc9c/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Beyond the Horizon</h3>
+                    <p class="novel-author">By Olivia Parker</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 6.9k</span>
+                        <span><i class="fas fa-star"></i> 4.3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 7 -->
+            <div class="novel-card" data-id="7">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/3498db/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Shadows of the Past</h3>
+                    <p class="novel-author">By Daniel Kim</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 5.4k</span>
+                        <span><i class="fas fa-star"></i> 4.2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 8 -->
+            <div class="novel-card" data-id="8">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/2ecc71/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">The Immortal's Secret</h3>
+                    <p class="novel-author">By Sophia Lee</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 4.8k</span>
+                        <span><i class="fas fa-star"></i> 4.5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
- <!-- Modal Sign-in -->
-  <div id="login-modal" class="modal" style="display: none;">
-    <div class="modal-content">
-      <span class="close">×</span>
-      <h2>Sign In</h2>
-      <form id="login-form">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+    <!-- Novel Detail Modal -->
+    <div class="modal-overlay" id="novelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Novel Title</h2>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-cover"></div>
+                <div class="modal-info">
+                    <p class="modal-author">By Author Name</p>
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <i class="fas fa-eye"></i>
+                            <span class="view-count">0</span> Views
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-star"></i>
+                            <span class="rating">0</span> Rating
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-book"></i>
+                            <span class="chapter-count">0</span> Chapters
+                        </div>
+                    </div>
+                    <div class="modal-genres">
+                        <!-- Genres will be added dynamically -->
+                    </div>
+                    <p class="modal-description">
+                        <!-- Description will be added dynamically -->
+                    </p>
+                    <div class="modal-buttons">
+                        <button class="modal-btn primary-btn">
+                            <i class="fas fa-book-open"></i>
+                            Start Reading
+                        </button>
+                        <button class="modal-btn secondary-btn bookmark-modal-btn">
+                            <i class="far fa-bookmark"></i>
+                            Add to Bookmarks
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-chapters">
+                <h3 class="chapters-title">Latest Chapters</h3>
+                <div class="chapter-list">
+                    <!-- Chapters will be added dynamically -->
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <button type="submit" class="sign-in-btn">Sign In</button>
-        <p class="error-message" id="error-message" style="display: none;"></p>
-        <p class="signup-link">Don't have an account? <a href="#" id="signup-link">Sign up</a></p>
-      </form>
     </div>
-  </div>
 
-  <!-- Modal Sign-up -->
-<div id="signup-modal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <span class="close">×</span>
-    <h2>Sign Up</h2>
-    <form id="signup-form">
-      <div class="form-group">
-        <label for="signup-username">Username</label>
-        <input type="text" id="signup-username" name="username" placeholder="Enter your username" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-email">Email</label>
-        <input type="email" id="signup-email" name="email" placeholder="Enter your email" required>
-      </div>
-      <div class="form-group">
-        <label for="signup-password">Password</label>
-        <input type="password" id="signup-password" name="password" placeholder="Enter your password" required>
-      </div>
-      <button type="submit" class="sign-up-btn">Sign Up</button>
-      <p class="error-message" id="signup-error-message" style="display: none;"></p>
-      <p class="signin-link">Already have an account? <a href="#" id="signin-link">Sign in</a></p>
-    </form>
-  </div>
-</div>
+    <!-- Sign In Modal -->
+    <div class="modal-overlay auth-modal" id="signinModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Sign In</h2>
+                <button class="modal-close">×</button>
+            </div>
+            <form class="auth-form" id="signinForm">
+                <div class="form-group">
+                    <label for="signinEmail" class="form-label">Email</label>
+                    <input type="email" id="signinEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signinPassword" class="form-label">Password</label>
+                    <input type="password" id="signinPassword" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="form-submit">Sign In</button>
+                <div class="form-footer">
+                    Don't have an account? <a id="switchToSignup">Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay auth-modal" id="signupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Sign Up</h2>
+                <button class="modal-close">×</button>
+            </div>
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label for="signupUsername" class="form-label">Username</label>
+                    <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail" class="form-label">Email</label>
+                    <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword" class="form-label">Password</label>
+                    <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="form-submit">Sign Up</button>
+                <div class="form-footer">
+                    Already have an account? <a id="switchToSignin">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
-  <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
-
-
-
-
-
-
