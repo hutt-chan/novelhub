@@ -197,6 +197,7 @@ app.put('/api/novels/:id', authenticateToken, restrictTo(['admin']), async (req,
         await logAction(req.user.id, `Sửa tiểu thuyết: ${title}`);
         res.json({ message: 'Cập nhật tiểu thuyết thành công' });
     } catch (error) {
+        console.error('Lỗi khi cập nhật tiểu thuyết:', error);
         res.status(500).json({ error: 'Lỗi khi cập nhật tiểu thuyết' });
     }
 });
@@ -214,11 +215,14 @@ app.delete('/api/novels/:id', authenticateToken, restrictTo(['admin']), async (r
         await db.execute('DELETE FROM NovelGenres WHERE novel_id = ?', [id]);
         await db.execute('DELETE FROM Chapters WHERE novel_id = ?', [id]);
         await db.execute('DELETE FROM Bookmarks WHERE novel_id = ?', [id]);
+        await db.execute('DELETE FROM Favorites WHERE novel_id = ?', [id]);
+        await db.execute('DELETE FROM Comments WHERE novel_id = ?', [id]);
         await db.execute('DELETE FROM Novels WHERE id = ?', [id]);
 
         await logAction(req.user.id, `Xóa tiểu thuyết: ${novels[0].title}`);
         res.json({ message: 'Xóa tiểu thuyết thành công' });
     } catch (error) {
+        console.error('Lỗi khi xóa tiểu thuyết:', error);
         res.status(500).json({ error: 'Lỗi khi xóa tiểu thuyết' });
     }
 });
@@ -229,6 +233,7 @@ app.get('/api/admin/users', authenticateToken, restrictTo(['admin']), async (req
         const [users] = await db.execute('SELECT id, username, email, role, created_at FROM Users');
         res.json(users);
     } catch (error) {
+        console.error('Lỗi khi lấy danh sách người dùng:', error);
         res.status(500).json({ error: 'Lỗi khi lấy danh sách người dùng' });
     }
 });
@@ -254,6 +259,7 @@ app.put('/api/admin/users/:id', authenticateToken, restrictTo(['admin']), async 
         await logAction(req.user.id, `Thay đổi vai trò người dùng ID ${id} thành ${role}`);
         res.json({ message: 'Cập nhật vai trò thành công' });
     } catch (error) {
+        console.error('Lỗi khi cập nhật vai trò:', error);
         res.status(500).json({ error: 'Lỗi khi cập nhật vai trò' });
     }
 });
@@ -272,6 +278,7 @@ app.post('/api/bookmarks', authenticateToken, restrictTo(['user', 'admin']), asy
         if (error.code === 'ER_DUP_ENTRY') {
             res.status(400).json({ error: 'Bookmark đã tồn tại' });
         } else {
+            console.error('Lỗi khi thêm bookmark:', error);
             res.status(500).json({ error: 'Lỗi khi thêm bookmark' });
         }
     }
@@ -285,6 +292,7 @@ app.delete('/api/bookmarks/:novel_id', authenticateToken, restrictTo(['user', 'a
         await db.execute('DELETE FROM Bookmarks WHERE user_id = ? AND novel_id = ?', [req.user.id, novel_id]);
         res.json({ message: 'Xóa bookmark thành công' });
     } catch (error) {
+        console.error('Lỗi khi xóa bookmark:', error);
         res.status(500).json({ error: 'Lỗi khi xóa bookmark' });
     }
 });
@@ -293,14 +301,163 @@ app.get('/api/bookmarks', authenticateToken, restrictTo(['user', 'admin']), asyn
     try {
         const db = await connectDB();
         const [bookmarks] = await db.execute(`
-            SELECT n.id, n.title, n.author, n.views, n.rating, n.coverUrl, n.description, n.chapterCount
+            SELECT n.id, n.title, n.author, n.views, n.rating, n.coverUrl, n.description, n.chapterCount,
+                   EXISTS(SELECT 1 FROM Favorites f WHERE f.novel_id = n.id AND f.user_id = ?) AS is_favorited,
+                   COUNT(DISTINCT f.id) AS favorite_count
             FROM Bookmarks b
             JOIN Novels n ON b.novel_id = n.id
+            LEFT JOIN Favorites f ON n.id = f.novel_id
             WHERE b.user_id = ?
-        `, [req.user.id]);
-        res.json(bookmarks);
+            GROUP BY n.id
+        `, [req.user.id, req.user.id]);
+        res.json(bookmarks.map(b => ({
+            ...b,
+            is_favorited: !!b.is_favorited,
+            favorite_count: parseInt(b.favorite_count) || 0
+        })));
     } catch (error) {
+        console.error('Lỗi khi lấy danh sách bookmark:', error);
         res.status(500).json({ error: 'Lỗi khi lấy danh sách bookmark' });
+    }
+});
+
+app.post('/api/favorites', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
+    const { novel_id } = req.body;
+    if (!novel_id) {
+        return res.status(400).json({ error: 'Vui lòng cung cấp novel_id' });
+    }
+
+    try {
+        const db = await connectDB();
+        // Lấy tiêu đề tiểu thuyết để ghi log
+        const [novels] = await db.execute('SELECT title FROM Novels WHERE id = ?', [novel_id]);
+        if (!novels[0]) {
+            return res.status(404).json({ error: 'Tiểu thuyết không tồn tại' });
+        }
+        const novelTitle = novels[0].title;
+
+        await db.execute('INSERT INTO Favorites (user_id, novel_id) VALUES (?, ?)', [req.user.id, novel_id]);
+        await logAction(req.user.id, `Thêm yêu thích: ${novelTitle}`);
+        res.status(201).json({ message: 'Thêm yêu thích thành công' });
+    } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.status(400).json({ error: 'Yêu thích đã tồn tại' });
+        } else {
+            console.error('Lỗi khi thêm yêu thích:', error);
+            res.status(500).json({ error: 'Lỗi khi thêm yêu thích' });
+        }
+    }
+});
+
+app.delete('/api/favorites/:novel_id', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
+    const { novel_id } = req.params;
+
+    try {
+        const db = await connectDB();
+        // Lấy tiêu đề tiểu thuyết để ghi log (tùy chọn, bỏ comment nếu cần)
+        /*
+        const [novels] = await db.execute('SELECT title FROM Novels WHERE id = ?', [novel_id]);
+        if (!novels[0]) {
+            return res.status(404).json({ error: 'Tiểu thuyết không tồn tại' });
+        }
+        const novelTitle = novels[0].title;
+        */
+
+        await db.execute('DELETE FROM Favorites WHERE user_id = ? AND novel_id = ?', [req.user.id, novel_id]);
+        // await logAction(req.user.id, `Xóa yêu thích: ${novelTitle}`); // Bỏ comment nếu muốn ghi log
+        res.json({ message: 'Xóa yêu thích thành công' });
+    } catch (error) {
+        console.error('Lỗi khi xóa yêu thích:', error);
+        res.status(500).json({ error: 'Lỗi khi xóa yêu thích' });
+    }
+});
+
+app.get('/api/favorites', authenticateToken, async (req, res) => {
+    try {
+        const db = await connectDB();
+        const [favorites] = await db.query(`
+            SELECT n.id, n.title, n.author, n.views, n.coverUrl, n.description, n.chapterCount, n.updated_at,
+                   GROUP_CONCAT(g.name) AS genres,
+                   COUNT(DISTINCT f2.user_id) AS favorite_count,
+                   EXISTS(SELECT 1 FROM Bookmarks b WHERE b.novel_id = n.id AND b.user_id = ?) AS is_bookmarked,
+                   EXISTS(SELECT 1 FROM Favorites f WHERE f.novel_id = n.id AND f.user_id = ?) AS is_favorited
+            FROM Favorites f
+            JOIN Novels n ON f.novel_id = n.id
+            LEFT JOIN NovelGenres ng ON n.id = ng.novel_id
+            LEFT JOIN Genres g ON ng.genre_id = g.id
+            LEFT JOIN Favorites f2 ON n.id = f2.novel_id
+            WHERE f.user_id = ?
+            GROUP BY n.id
+        `, [req.user.id, req.user.id, req.user.id]);
+        res.json(favorites.map(f => ({
+            ...f,
+            genres: f.genres ? f.genres.split(',') : [],
+            favorite_count: parseInt(f.favorite_count) || 0,
+            is_bookmarked: !!f.is_bookmarked,
+            is_favorited: !!f.is_favorited
+        })));
+    } catch (error) {
+        console.error('Error fetching favorites:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.post('/api/comments', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
+    const { novel_id, content, rating } = req.body;
+    if (!novel_id || !content || !rating) {
+        return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin' });
+    }
+    if (rating < 1 || rating > 5) {
+        return res.status(400).json({ error: 'Đánh giá phải từ 1 đến 5' });
+    }
+
+    try {
+        const db = await connectDB();
+        await db.execute(
+            'INSERT INTO Comments (novel_id, user_id, content, rating) VALUES (?, ?, ?, ?)',
+            [novel_id, req.user.id, content, rating]
+        );
+
+        // Cập nhật rating trung bình của tiểu thuyết
+        const [novelRatings] = await db.execute(
+            'SELECT AVG(rating) as avg_rating FROM Comments WHERE novel_id = ?',
+            [novel_id]
+        );
+        const avgRating = parseFloat(novelRatings[0].avg_rating) || 0;
+        await db.execute('UPDATE Novels SET rating = ? WHERE id = ?', [avgRating.toFixed(1), novel_id]);
+
+        res.status(201).json({ message: 'Thêm bình luận thành công' });
+    } catch (error) {
+        console.error('Lỗi khi thêm bình luận:', error);
+        res.status(500).json({ error: 'Lỗi khi thêm bình luận' });
+    }
+});
+
+app.delete('/api/comments/:id', authenticateToken, restrictTo(['admin']), async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const db = await connectDB();
+        const [comments] = await db.execute('SELECT novel_id FROM Comments WHERE id = ?', [id]);
+        if (!comments[0]) {
+            return res.status(404).json({ error: 'Bình luận không tồn tại' });
+        }
+
+        const novel_id = comments[0].novel_id;
+        await db.execute('DELETE FROM Comments WHERE id = ?', [id]);
+
+        // Cập nhật rating trung bình của tiểu thuyết
+        const [novelRatings] = await db.execute(
+            'SELECT AVG(rating) as avg_rating FROM Comments WHERE novel_id = ?',
+            [novel_id]
+        );
+        const avgRating = parseFloat(novelRatings[0].avg_rating) || 0;
+        await db.execute('UPDATE Novels SET rating = ? WHERE id = ?', [avgRating.toFixed(1), novel_id]);
+
+        res.json({ message: 'Xóa bình luận thành công' });
+    } catch (error) {
+        console.error('Lỗi khi xóa bình luận:', error);
+        res.status(500).json({ error: 'Lỗi khi xóa bình luận' });
     }
 });
 

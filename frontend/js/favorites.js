@@ -1,4 +1,5 @@
 let novels = [];
+let favorites = [];
 
 async function fetchNovels() {
     try {
@@ -8,7 +9,6 @@ async function fetchNovels() {
         });
         if (!response.ok) throw new Error(`Failed to fetch novels: ${response.status}`);
         novels = await response.json();
-        // Đảm bảo is_favorited và is_bookmarked có giá trị mặc định
         novels.forEach(novel => {
             novel.is_favorited = novel.is_favorited || false;
             novel.is_bookmarked = novel.is_bookmarked || false;
@@ -20,19 +20,26 @@ async function fetchNovels() {
 }
 
 async function fetchFavorites() {
-    if (!isLoggedIn) return [];
+    if (!isLoggedIn) {
+        console.log('User not logged in, returning empty favorites');
+        return [];
+    }
     try {
+        const token = localStorage.getItem('token');
+        console.log('Fetching favorites with token:', token);
         const response = await fetch('http://localhost:3000/api/favorites', {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) throw new Error(`Failed to fetch favorites: ${response.status}`);
         const data = await response.json();
         console.log('Favorites response:', data);
-        // Xử lý các format response khác nhau
+        // Xử lý nhiều format response
         if (Array.isArray(data)) {
             return data;
         } else if (data.favorites && Array.isArray(data.favorites)) {
             return data.favorites;
+        } else if (data.data && Array.isArray(data.data)) {
+            return data.data;
         } else {
             console.warn('Unexpected favorites format:', data);
             return [];
@@ -52,7 +59,6 @@ async function fetchBookmarks() {
         if (!response.ok) throw new Error(`Failed to fetch bookmarks: ${response.status}`);
         const data = await response.json();
         console.log('Bookmarks response:', data);
-        // Xử lý các format response khác nhau
         if (Array.isArray(data)) {
             return data;
         } else if (data.bookmarks && Array.isArray(data.bookmarks)) {
@@ -103,7 +109,6 @@ async function toggleBookmark(btn, novelId) {
             btn.querySelector('i').classList.replace('fas', 'far');
             if (novel) novel.is_bookmarked = false;
         } else {
-            // Kiểm tra trạng thái từ server
             const bookmarks = await fetchBookmarks();
             if (bookmarks.some(b => b.novel_id == novelId)) {
                 console.log('Bookmark already exists for novelId:', novelId);
@@ -125,7 +130,7 @@ async function toggleBookmark(btn, novelId) {
                 if (novel) novel.is_bookmarked = true;
             }
         }
-        // Cập nhật modal nếu đang mở
+        // Cập nhật modal
         const novelModal = document.getElementById('novelModal');
         if (novelModal.getAttribute('data-novel-id') == novelId) {
             const bookmarkModalBtn = novelModal.querySelector('.bookmark-modal-btn');
@@ -160,10 +165,12 @@ async function toggleFavorite(btn, novelId) {
                 novel.is_favorited = false;
                 novel.favorite_count = parseInt(novel.favorite_count) - 1;
             }
+            // Cập nhật favorites
+            favorites = favorites.filter(f => f.id != novelId);
+            renderFavorites();
         } else {
-            // Kiểm tra trạng thái từ server
-            const favorites = await fetchFavorites();
-            if (favorites.some(f => f.novel_id == novelId)) {
+            const favoritesList = await fetchFavorites();
+            if (favoritesList.some(f => f.novel_id == novelId)) {
                 console.log('Favorite already exists for novelId:', novelId);
                 btn.classList.add('active');
                 btn.querySelector('i').classList.replace('far', 'fas');
@@ -183,10 +190,14 @@ async function toggleFavorite(btn, novelId) {
                 if (novel) {
                     novel.is_favorited = true;
                     novel.favorite_count = parseInt(novel.favorite_count) + 1;
+                    if (!favorites.some(f => f.id == novel.id)) {
+                        favorites.push(novel);
+                    }
+                    renderFavorites();
                 }
             }
         }
-        // Cập nhật favorite count trên novel card
+        // Cập nhật novel card
         const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
         if (novelCard && novel) {
             const favoriteCount = novelCard.querySelector('.favorite-count');
@@ -194,7 +205,7 @@ async function toggleFavorite(btn, novelId) {
                 favoriteCount.textContent = novel.favorite_count;
             }
         }
-        // Cập nhật modal nếu đang mở
+        // Cập nhật modal
         const novelModal = document.getElementById('novelModal');
         if (novelModal.getAttribute('data-novel-id') == novelId && novel) {
             const modalFavoriteCount = novelModal.querySelector('.favorite-count');
@@ -212,11 +223,19 @@ async function toggleFavorite(btn, novelId) {
     }
 }
 
-function renderFavorites(favorites) {
+function renderFavorites() {
     const container = document.querySelector('#favorites .novel-grid');
     const message = document.querySelector('#favorites .favorites-message');
+    const loading = document.querySelector('#favorites .loading');
     container.innerHTML = '';
     message.style.display = 'none';
+    loading.style.display = 'none';
+
+    if (!isLoggedIn) {
+        message.textContent = 'Please sign in to view your favorites.';
+        message.style.display = 'block';
+        return;
+    }
 
     if (favorites.length === 0) {
         message.textContent = 'No favorites yet.';
@@ -251,6 +270,42 @@ function renderFavorites(favorites) {
             </div>
         `;
         container.appendChild(card);
+    });
+
+    // Thêm event listeners
+    container.querySelectorAll('.novel-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (!e.target.closest('.bookmark-btn') && !e.target.closest('.favorite-btn') && !e.target.closest('.remove-favorite-btn')) {
+                const novelId = this.getAttribute('data-id');
+                openNovelModal(novelId);
+            }
+        });
+    });
+
+    container.querySelectorAll('.bookmark-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const novelId = this.closest('.novel-card').getAttribute('data-id');
+            toggleBookmark(this, novelId);
+        });
+    });
+
+    container.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const novelId = this.closest('.novel-card').getAttribute('data-id');
+            toggleFavorite(this, novelId);
+        });
+    });
+
+    container.querySelectorAll('.remove-favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const novelId = this.closest('.novel-card').getAttribute('data-id');
+            const novelCard = this.closest('.novel-card');
+            const favoriteBtn = novelCard.querySelector('.favorite-btn');
+            toggleFavorite(favoriteBtn, novelId);
+        });
     });
 }
 
@@ -305,99 +360,46 @@ function openNovelModal(novelId) {
         });
     }
 
-    openModal('novelModal');
-}
+    // Giả lập comments
+    const commentList = novelModal.querySelector('.comment-list');
+    const commentMessage = novelModal.querySelector('.comment-message');
+    commentList.innerHTML = '';
+    commentMessage.style.display = 'block';
+    commentMessage.textContent = 'No comments yet.';
 
-function renderNovelCards(novels, sectionId) {
-    const container = document.querySelector(`#${sectionId}`);
-    container.innerHTML = '';
-    if (!novels.length) {
-        container.innerHTML = '<div class="no-novels">No novels available</div>';
-        return;
-    }
-    novels.forEach(novel => {
-        const card = document.createElement('div');
-        card.className = 'novel-card';
-        card.setAttribute('data-id', novel.id);
-        card.innerHTML = `
-            <div class="novel-cover" style="background-image: url('${novel.coverUrl}');">
-                <button class="bookmark-btn ${novel.is_bookmarked ? 'active' : ''}">
-                    <i class="${novel.is_bookmarked ? 'fas' : 'far'} fa-bookmark"></i>
-                </button>
-                <button class="favorite-btn ${novel.is_favorited ? 'active' : ''}">
-                    <i class="${novel.is_favorited ? 'fas' : 'far'} fa-heart"></i>
-                </button>
-            </div>
-            <div class="novel-info">
-                <h3 class="novel-title">${novel.title}</h3>
-                <p class="novel-author">By ${novel.author}</p>
-                <div class="novel-stats">
-                    <span><i class="fas fa-eye"></i> ${novel.views.toLocaleString()}</span>
-                    <span><i class="fas fa-star"></i> ${novel.rating || 0}</span>
-                    <span><i class="fas fa-heart"></i> <span class="favorite-count">${novel.favorite_count}</span></span>
-                </div>
-            </div>
-        `;
-        container.appendChild(card);
-    });
+    openModal('novelModal');
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     await initAuth();
-    await fetchNovels();
 
-    // Lấy danh sách favorites và bookmarks
-    const favorites = await fetchFavorites();
+    // Hiển thị loading
+    const loading = document.querySelector('#favorites .loading');
+    loading.style.display = 'block';
+
+    // Lấy dữ liệu
+    await fetchNovels();
+    const favoriteIds = await fetchFavorites();
     const bookmarks = await fetchBookmarks();
 
-    // Cập nhật is_favorited và is_bookmarked trong novels
+    // Debug
+    console.log('Favorite IDs:', favoriteIds);
+    console.log('Novels:', novels);
+
+    // Cập nhật trạng thái
     novels.forEach(novel => {
-        novel.is_favorited = favorites.some(f => f.novel_id == novel.id);
+        novel.is_favorited = favoriteIds.some(f => f.novel_id == novel.id);
         novel.is_bookmarked = bookmarks.some(b => b.novel_id == novel.id);
     });
 
-    // Render Weekly Featured (4 tiểu thuyết có lượt xem cao nhất)
-    const featuredNovels = novels
-        .sort((a, b) => b.views - a.views)
-        .slice(0, 4);
-    renderNovelCards(featuredNovels, 'weeklyFeatured');
+    // Lọc favorites
+    favorites = novels.filter(novel => novel.is_favorited);
+    console.log('Filtered favorites:', favorites);
 
-    // Render New Updates (4 tiểu thuyết có chương mới nhất)
-    const updatedNovels = novels
-        .sort((a, b) => {
-            const aLatest = a.chapters[0]?.date || 0;
-            const bLatest = b.chapters[0]?.date || 0;
-            return new Date(bLatest) - new Date(aLatest);
-        })
-        .slice(0, 4);
-    renderNovelCards(updatedNovels, 'newUpdates');
+    // Render favorites
+    renderFavorites();
 
-    // Thêm event listeners cho novel cards, bookmark và favorite buttons
-    document.querySelectorAll('.novel-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            if (!e.target.closest('.bookmark-btn') && !e.target.closest('.favorite-btn')) {
-                const novelId = this.getAttribute('data-id');
-                openNovelModal(novelId);
-            }
-        });
-    });
-
-    document.querySelectorAll('.bookmark-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const novelId = this.closest('.novel-card').getAttribute('data-id');
-            toggleBookmark(this, novelId);
-        });
-    });
-
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const novelId = this.closest('.novel-card').getAttribute('data-id');
-            toggleFavorite(this, novelId);
-        });
-    });
-
+    // Modal event listeners
     const novelModal = document.getElementById('novelModal');
     const novelModalClose = novelModal.querySelector('.modal-close');
     const bookmarkModalBtn = novelModal.querySelector('.bookmark-modal-btn');
@@ -414,19 +416,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     bookmarkModalBtn.addEventListener('click', async function() {
         const novelId = novelModal.getAttribute('data-novel-id');
         const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
-        const bookmarkBtn = novelCard.querySelector('.bookmark-btn');
-
-        await toggleBookmark(bookmarkBtn, novelId);
+        const bookmarkBtn = novelCard?.querySelector('.bookmark-btn');
+        if (bookmarkBtn) {
+            await toggleBookmark(bookmarkBtn, novelId);
+        }
     });
 
     favoriteModalBtn.addEventListener('click', async function() {
         const novelId = novelModal.getAttribute('data-novel-id');
         const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
-        const favoriteBtn = novelCard.querySelector('.favorite-btn');
-
-        await toggleFavorite(favoriteBtn, novelId);
+        const favoriteBtn = novelCard?.querySelector('.favorite-btn');
+        if (favoriteBtn) {
+            await toggleFavorite(favoriteBtn, novelId);
+        }
     });
 
+    // Auth modals
     document.querySelectorAll('.auth-modal .modal-close').forEach(btn => {
         btn.addEventListener('click', closeAllModals);
     });
@@ -454,6 +459,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const email = document.getElementById('signinEmail').value;
         const password = document.getElementById('signinPassword').value;
         await signIn(email, password);
+        if (isLoggedIn) {
+            loading.style.display = 'block';
+            const favoriteIds = await fetchFavorites();
+            const bookmarks = await fetchBookmarks();
+            novels.forEach(novel => {
+                novel.is_favorited = favoriteIds.some(f => f.novel_id == novel.id);
+                novel.is_bookmarked = bookmarks.some(b => b.novel_id == novel.id);
+            });
+            favorites = novels.filter(novel => novel.is_favorited);
+            renderFavorites();
+        }
     });
 
     document.getElementById('signupForm').addEventListener('submit', async function(e) {
@@ -465,10 +481,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         await signUp(username, email, password, confirmPassword);
     });
 
+    // Nav links
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function() {
             document.querySelector('.nav-link.active')?.classList.remove('active');
             this.classList.add('active');
         });
+    });
+
+    // Comment form (giả lập)
+    document.getElementById('commentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const content = document.getElementById('commentContent').value;
+        if (!isLoggedIn) {
+            alert('Vui lòng đăng nhập để bình luận!');
+            return;
+        }
+        const commentList = document.querySelector('.comment-list');
+        const commentMessage = document.querySelector('.comment-message');
+        const commentItem = document.createElement('div');
+        commentItem.className = 'comment-item';
+        commentItem.innerHTML = `
+            <div class="comment-author">You</div>
+            <div class="comment-content">${content}</div>
+            <div class="comment-date">${new Date().toLocaleString()}</div>
+        `;
+        commentList.appendChild(commentItem);
+        commentMessage.style.display = 'none';
+        document.getElementById('commentContent').value = '';
     });
 });

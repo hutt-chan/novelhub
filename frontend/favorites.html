@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novel - Home</title>
+    <title>Novel - Favorites</title>
     <link rel="stylesheet" href="css/test.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -11,7 +11,6 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Giữ nguyên sidebar -->
         <div class="logo-container">
             <div class="logo">
                 <i class="fas fa-book-open logo-icon"></i>
@@ -19,11 +18,11 @@
             </div>
         </div>
         <div class="nav-links">
-            <a href="#" class="nav-link active">
+            <a href="index.html" class="nav-link">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="favorites.html" class="nav-link">
+            <a href="favorites.html" class="nav-link active">
                 <i class="fas fa-heart"></i>
                 <span>Favorites</span>
             </a>
@@ -49,9 +48,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Auth Buttons -->
-        <div class="auth-container" id="authContainer">
-            <!-- Will be populated by JS -->
-        </div>
+        <div class="auth-container" id="authContainer"></div>
 
         <!-- Search Bar -->
         <div class="search-container">
@@ -59,41 +56,23 @@
             <input type="text" class="search-bar" placeholder="Search for novels or authors">
         </div>
 
-        <!-- Weekly Featured Section -->
-        <h2 class="section-title">
-            <i class="fas fa-star"></i>
-            Weekly Featured
-        </h2>
-        <div class="novel-grid" id="weeklyFeatured">
-            <!-- Novel cards will be populated by JS -->
-        </div>
-
-        <!-- New Updates Section -->
-        <h2 class="section-title">
-            <i class="fas fa-clock"></i>
-            New Updates
-        </h2>
-        <div class="novel-grid" id="newUpdates">
-            <!-- Novel cards will be populated by JS -->
-        </div>
-
         <!-- Favorites Section -->
-        <div id="favorites" style="display: none;">
+        <div id="favorites">
             <h2 class="section-title">
                 <i class="fas fa-heart"></i>
                 Your Favorites
             </h2>
             <div class="favorites-message" style="display: none; text-align: center; color: #95a5a6;">
-                <!-- Message: "No favorites yet" -->
+                No favorites yet.
             </div>
-            <div class="novel-grid">
-                <!-- Favorite novel cards rendered dynamically -->
+            <div class="loading" style="display: none; text-align: center; padding: 20px; color: #95a5a6;">
+                Loading...
             </div>
+            <div class="novel-grid"></div>
         </div>
     </div>
 
     <!-- Novel Detail Modal -->
-    <!-- Giữ nguyên modal, chỉ cập nhật favorite-count -->
     <div class="modal-overlay" id="novelModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -110,10 +89,6 @@
                             <span class="view-count">0</span> Views
                         </div>
                         <div class="modal-stat">
-                            <i class="fas fa-star"></i>
-                            <span class="rating">0</span> Rating
-                        </div>
-                        <div class="modal-stat">
                             <i class="fas fa-book"></i>
                             <span class="chapter-count">0</span> Chapters
                         </div>
@@ -122,12 +97,8 @@
                             <span class="favorite-count">0</span> Favorites
                         </div>
                     </div>
-                    <div class="modal-genres">
-                        <!-- Genres will be added dynamically -->
-                    </div>
-                    <p class="modal-description">
-                        <!-- Description will be added dynamically -->
-                    </p>
+                    <div class="modal-genres"></div>
+                    <p class="modal-description"></p>
                     <div class="modal-buttons">
                         <button class="modal-btn primary-btn">
                             <i class="fas fa-book-open"></i>
@@ -146,12 +117,13 @@
             </div>
             <div class="modal-chapters">
                 <h3 class="chapters-title">Latest Chapters</h3>
-                <div class="chapter-list">
-                    <!-- Chapters will be added dynamically -->
-                </div>
+                <div class="chapter-list"></div>
             </div>
             <div class="modal-comments">
                 <h3 class="comments-title">Comments</h3>
+                <div class="comment-message" style="display: none; text-align: center; color: #95a5a6;">
+                    No comments yet.
+                </div>
                 <form id="commentForm">
                     <div class="form-group">
                         <label for="commentContent" class="form-label">Comment</label>
@@ -159,9 +131,7 @@
                     </div>
                     <button type="submit" class="form-submit">Submit Comment</button>
                 </form>
-                <div class="comment-list">
-                    <!-- Comments will be added dynamically -->
-                </div>
+                <div class="comment-list"></div>
             </div>
         </div>
     </div>
@@ -222,8 +192,7 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="js/auth.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/favorites.js"></script>
 </body>
 </html>

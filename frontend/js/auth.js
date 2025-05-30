@@ -12,6 +12,8 @@ async function initAuth() {
             if (data.user) {
                 currentUser = data.user;
                 isLoggedIn = true;
+            } else {
+                localStorage.removeItem('token');
             }
         } catch (error) {
             console.error('Lỗi khi kiểm tra token:', error);
@@ -42,13 +44,16 @@ function updateAuthUI() {
                 Đăng xuất
             </button>
         `;
-        document.getElementById('logoutBtn').addEventListener('click', logout);
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
 
         if (currentUser.role === 'admin') {
             const adminLink = document.createElement('a');
             adminLink.className = 'nav-link';
             adminLink.href = '#admin';
-            adminLink.innerHTML = '<i class="fas fa-cog"></i> Manage';
+            adminLink.innerHTML = '<i class="fas fa-cog"></i> <span>Quản trị</span>';
             adminLink.addEventListener('click', () => {
                 alert('Chuyển đến trang quản trị (chưa triển khai giao diện)');
             });
@@ -65,13 +70,24 @@ function updateAuthUI() {
                 Đăng ký
             </button>
         `;
-        document.getElementById('signinBtn').addEventListener('click', () => openModal('signinModal'));
-        document.getElementById('signupBtn').addEventListener('click', () => openModal('signupModal'));
+        const signinBtn = document.getElementById('signinBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        if (signinBtn) {
+            signinBtn.addEventListener('click', () => openModal('signinModal'));
+        }
+        if (signupBtn) {
+            signupBtn.addEventListener('click', () => openModal('signupModal'));
+        }
     }
 
-    document.querySelectorAll('.bookmark-btn, .bookmark-modal-btn').forEach(btn => {
+    // Điều khiển hiển thị các nút và form yêu cầu đăng nhập
+    document.querySelectorAll('.bookmark-btn, .favorite-btn, .bookmark-modal-btn, .favorite-modal-btn').forEach(btn => {
         btn.style.display = isLoggedIn ? 'block' : 'none';
     });
+    const commentForm = document.getElementById('commentForm');
+    if (commentForm) {
+        commentForm.style.display = isLoggedIn ? 'block' : 'none';
+    }
 }
 
 async function signIn(email, password) {
