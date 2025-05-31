@@ -6,6 +6,7 @@
     <title>Novel - Home</title>
     <!-- <link rel="stylesheet" href="css/styles.css"> -->
     <link rel="stylesheet" href="css/test.css">
+    <link rel="stylesheet" href="css/search.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -54,11 +55,22 @@
             <!-- Will be populated by JS -->
         </div>
 
+        <!-- Thêm vào sau <div class="auth-container"> trong .main-content -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm tiểu thuyết hoặc tác giả..." autocomplete="off">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+            <div id="searchResults" class="search-results"></div>
+        </div>
+    </div>
+        
+    
+
         <!-- Search Bar -->
-        <div class="search-container">
+        <!-- <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <input type="text" class="search-bar" placeholder="Search for novels or authors">
-        </div>
+        </div> -->
 
         <!-- Weekly Featured Section -->
         <h2 class="section-title">

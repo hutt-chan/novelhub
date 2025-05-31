@@ -291,3 +291,131 @@ function closeAllModals() {
     });
     document.body.style.overflow = '';
 }
+
+
+// Tìm kiếm tiểu thuyết theo tên hoặc tác giả
+function searchNovels(query) {
+    if (!query || query.length < 2) return [];
+    const lowerQuery = query.toLowerCase();
+    return novels.filter(novel =>
+        novel.title.toLowerCase().includes(lowerQuery) ||
+        novel.author.toLowerCase().includes(lowerQuery)
+    ).slice(0, 7); // Giới hạn 7 kết quả
+}
+
+// Render danh sách gợi ý tìm kiếm
+function renderSearchResults(results, container) {
+    container.innerHTML = '';
+    if (!results.length) {
+        container.innerHTML = '<div class="no-results">Không tìm thấy kết quả</div>';
+        return;
+    }
+    results.forEach(novel => {
+        console.log('Novel:', novel); // Debug dữ liệu novel
+        if (!novel.id) {
+            console.error('Novel missing id:', novel);
+            return;
+        }
+        const resultItem = document.createElement('div');
+        resultItem.className = 'search-result-item';
+        resultItem.innerHTML = `
+            <div class="search-result-cover" style="background-image: url(${novel.coverUrl || 'default-cover.jpg'})"></div>
+            <div class="search-result-info">
+                <h3 class="search-result-title">${novel.title}</h3>
+                <p class="search-result-author">By ${novel.author}</p>
+            </div>
+        `;
+        // resultItem.addEventListener('click', () => {
+        //     console.log('Clicked novel:', novel.id); // Debug click
+        //     window.location.href = `novel.html?novel_id=${novel.id}`;
+        //     container.innerHTML = '';
+        //     document.getElementById('searchInput').value = '';
+        // });
+        resultItem.addEventListener('mousedown', () => { // Dùng mousedown thay click
+        console.log('Clicked novel:', novel.id);
+        window.location.href = `novel.html?novel_id=${novel.id}`;
+        container.innerHTML = '';
+        document.getElementById('searchInput').value = '';
+        });
+        container.appendChild(resultItem);
+    });
+}
+
+// Thêm sự kiện tìm kiếm
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    let searchTimeout;
+
+    if (!searchInput || !searchResults) return;
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        const query = searchInput.value.trim();
+        searchTimeout = setTimeout(() => {
+            if (query.length < 2) {
+                searchResults.classList.remove('active');
+                searchResults.innerHTML = '';
+                return;
+            }
+            const results = searchNovels(query);
+            renderSearchResults(results, searchResults);
+            searchResults.classList.add('active');
+        }, 300); // Debounce 300ms
+    });
+
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.length >= 2) {
+            searchResults.classList.add('active');
+        }
+    });
+
+    searchInput.addEventListener('blur', () => {
+        setTimeout(() => {
+            searchResults.classList.remove('active');
+        }, 300); // Delay để click vào gợi ý
+    });
+
+    document.querySelector('.search-btn').addEventListener('click', () => {
+        const query = searchInput.value.trim();
+        if (query.length >= 2) {
+            const results = searchNovels(query);
+            renderSearchResults(results, searchResults);
+            searchResults.classList.add('active');
+        }
+    });
+}
+
+// Gọi initSearch trong DOMContentLoaded
+document.addEventListener('DOMContentLoaded', async () => {
+    await initAuth();
+    await fetchNovels();
+
+    const favorites = await fetchFavorites();
+    const bookmarks = await fetchBookmarks();
+
+    novels.forEach(novel => {
+        novel.is_favorited = favorites.some(f => f.novel_id == novel.id);
+        novel.is_bookmarked = bookmarks.some(b => b.novel_id == novel.id);
+    });
+
+    const featuredNovels = novels
+        .sort((a, b) => b.views - a.views)
+        .slice(0, 4);
+    renderNovelCards(featuredNovels, document.querySelector('#weeklyFeatured'), true);
+
+    const updatedNovels = novels
+        .sort((a, b) => {
+            const aLatest = a.chapters?.[0]?.date || 0;
+            const bLatest = b.chapters?.[0]?.date || 0;
+            return new Date(bLatest) - new Date(aLatest);
+        })
+        .slice(0, 4);
+    renderNovelCards(updatedNovels, document.querySelector('#newUpdates'), true);
+
+    renderFavorites(favorites);
+
+    initSearch(); // Khởi tạo tìm kiếm
+
+    // ... phần còn lại của DOMContentLoaded ...
+});

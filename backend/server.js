@@ -499,6 +499,22 @@ app.get('/api/novels/:novel_id/chapters', async (req, res) => {
     }
 });
 
+async function searchNovels(query) {
+    if (!query || query.length < 2) return [];
+    try {
+        const response = await fetch(`http://localhost:3000/api/novels?search=${encodeURIComponent(query)}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        if (!response.ok) throw new Error(`Search failed: ${response.status}`);
+        const results = await response.json();
+        return results.slice(0, 7); // Giới hạn 7 kết quả
+    } catch (error) {
+        console.error('Search error:', error);
+        return [];
+    }
+}
+
+
 app.listen(3000, () => {
     console.log('Server chạy tại http://localhost:3000');
 });
