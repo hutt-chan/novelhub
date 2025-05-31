@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
             const content = document.getElementById('commentContent').value;
-            const rating = document.getElementById('commentRating').value;
+            // const rating = document.getElementById('commentRating').value;
             try {
                 await fetch('http://localhost:3000/api/comments', {
                     method: 'POST',
