@@ -121,10 +121,11 @@ app.get('/api/novels', async (req, res) => {
             GROUP BY n.id
         `);
         const [chapters] = await db.execute(`
-            SELECT c.novel_id, c.name, c.date
+            SELECT c.id, c.novel_id, c.name, c.date
             FROM Chapters c
             ORDER BY c.id DESC
         `);
+        console.log('Chapters fetched from DB:', chapters);
 
         const result = novels.map(novel => ({
             ...novel,
@@ -458,6 +459,43 @@ app.delete('/api/comments/:id', authenticateToken, restrictTo(['admin']), async 
     } catch (error) {
         console.error('Lỗi khi xóa bình luận:', error);
         res.status(500).json({ error: 'Lỗi khi xóa bình luận' });
+    }
+});
+
+// Lấy nội dung chương cụ thể
+app.get('/api/chapters/:novel_id/:chapter_id', authenticateToken, async (req, res) => {
+    const { novel_id, chapter_id } = req.params;
+
+    try {
+        const db = await connectDB();
+        const [chapters] = await db.execute(
+            'SELECT id, novel_id, name, content, date FROM Chapters WHERE novel_id = ? AND id = ?',
+            [novel_id, chapter_id]
+        );
+        if (!chapters[0]) {
+            return res.status(404).json({ error: 'Chương không tồn tại' });
+        }
+        res.json(chapters[0]);
+    } catch (error) {
+        console.error('Lỗi khi lấy chương:', error);
+        res.status(500).json({ error: 'Lỗi khi lấy chương' });
+    }
+});
+
+// Lấy danh sách chương của một tiểu thuyết
+app.get('/api/novels/:novel_id/chapters', authenticateToken, async (req, res) => {
+    const { novel_id } = req.params;
+
+    try {
+        const db = await connectDB();
+        const [chapters] = await db.execute(
+            'SELECT id, novel_id, name, date FROM Chapters WHERE novel_id = ? ORDER BY id ASC',
+            [novel_id]
+        );
+        res.json(chapters);
+    } catch (error) {
+        console.error('Lỗi khi lấy danh sách chương:', error);
+        res.status(500).json({ error: 'Lỗi khi lấy danh sách chương' });
     }
 });
 
