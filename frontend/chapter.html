@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="css/test.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        #authContainer {
+            display: none !important;
+        }
+    </style>
+    <style>
+    .chapter-text {
+        white-space: pre-line;
+    }
+</style>
+
 </head>
 <body>
     <!-- Sidebar -->
@@ -51,7 +62,7 @@
         <div class="auth-container" id="authContainer"></div>
 
         <div class="chapter-content">
-            <a href="#" class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Quay lại tiểu thuyết</a>
+            <a href="#" class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</a>
             <h2 class="chapter-title">Đang tải...</h2>
             <div class="chapter-text loading">Đang tải nội dung chương...</div>
             <div class="navigation">
@@ -64,124 +75,6 @@
     <!-- Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
-    <script>
-        // Lấy novel_id và chapter_id từ URL
-        const getParams = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            return {
-                novelId: urlParams.get('novel_id'),
-                chapterId: urlParams.get('chapter_id')
-            };
-        };
-
-        // Gọi API lấy nội dung chương
-        async function fetchChapter(novelId, chapterId, token) {
-            try {
-                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-                const response = await fetch(`http://localhost:3000/api/chapters/${novelId}/${chapterId}`, { headers });
-                if (!response.ok) throw new Error(`Không thể tải chương: ${response.status}`);
-                return await response.json();
-            } catch (error) {
-                console.error('Lỗi khi lấy chương:', error);
-                return null;
-            }
-        }
-
-        // Gọi API lấy danh sách chương
-        async function fetchChapterList(novelId, token) {
-            try {
-                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-                const response = await fetch(`http://localhost:3000/api/novels/${novelId}/chapters`, { headers });
-                if (!response.ok) throw new Error(`Không thể tải danh sách chương: ${response.status}`);
-                return await response.json();
-            } catch (error) {
-                console.error('Lỗi khi lấy danh sách chương:', error);
-                return [];
-            }
-        }
-
-        // Cập nhật nút điều hướng trước/sau
-        function updateNavigation(novelId, chapterId, chapters) {
-            const prevBtn = document.getElementById('prevChapter');
-            const nextBtn = document.getElementById('nextChapter');
-            const currentIndex = chapters.findIndex(ch => ch.id == chapterId);
-
-            if (currentIndex > 0) {
-                prevBtn.disabled = false;
-                prevBtn.onclick = () => {
-                    window.location.href = `chapter.html?novel_id=${novelId}&chapter_id=${chapters[currentIndex - 1].id}`;
-                };
-            } else {
-                prevBtn.disabled = true;
-            }
-
-            if (currentIndex < chapters.length - 1 && currentIndex !== -1) {
-                nextBtn.disabled = false;
-                nextBtn.onclick = () => {
-                    window.location.href = `chapter.html?novel_id=${novelId}&chapter_id=${chapters[currentIndex + 1].id}`;
-                };
-            } else {
-                nextBtn.disabled = true;
-            }
-        }
-
-        // Highlight nav-link trong sidebar
-        function highlightNavLink() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                if (link.href.includes('index.html')) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
-        }
-
-        // Khởi tạo trang
-        async function init() {
-            // Khởi tạo auth (từ auth.js)
-            await initAuth();
-
-            // Lấy token và params
-            const token = localStorage.getItem('token');
-            const { novelId, chapterId } = getParams();
-
-            // Kiểm tra params
-            const chapterText = document.querySelector('.chapter-text');
-            if (!novelId || !chapterId || chapterId === 'undefined') {
-                chapterText.className = 'chapter-text error';
-                chapterText.textContent = 'Thiếu thông tin tiểu thuyết hoặc chương';
-                return;
-            }
-
-            // Thiết lập nút quay lại
-            document.getElementById('backBtn').href = `novel.html?novel_id=${novelId}`;
-
-            // Highlight nav-link
-            highlightNavLink();
-
-            // Lấy nội dung chương
-            const chapter = await fetchChapter(novelId, chapterId, token);
-            if (chapter) {
-                document.querySelector('.chapter-title').textContent = chapter.name;
-                chapterText.className = 'chapter-text';
-                chapterText.textContent = chapter.content || 'Nội dung chương hiện chưa có';
-            } else {
-                chapterText.className = 'chapter-text error';
-                chapterText.textContent = 'Không thể tải nội dung chương';
-            }
-
-            // Lấy danh sách chương để điều hướng
-            const chapters = await fetchChapterList(novelId, token);
-            if (chapters.length) {
-                updateNavigation(novelId, chapterId, chapters);
-            } else {
-                chapterText.className = 'chapter-text error';
-                chapterText.textContent = 'Không có danh sách chương';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
+    <script src="js/chapter.js"> </script>
 </body>
 </html>

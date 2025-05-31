@@ -520,6 +520,57 @@ body {
     font-weight: 600;
 }
 
+.back-btn {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.back-btn i {
+  margin-right: 6px;
+}
+
+.back-btn:hover {
+  color: #216a94;
+  text-decoration: underline;
+}
+
+.chapter-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #e0f0ff;
+  border-color: #3498db;
+  color: #000;
+}
+
+.nav-btn:disabled {
+  background-color: #eee;
+  border-color: #ccc;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+
 .novel-comments {
     margin-top: 2.5rem;
 }
@@ -899,18 +950,18 @@ body {
     gap: 0.5rem;
 }
 
-.chapter-item {
+/* .chapter-item {
     display: flex;
     justify-content: space-between;
     padding: 0.8rem;
     border-radius: 5px;
     background-color: #f8f9fc;
     transition: background-color 0.3s ease;
-}
+} */
 
-.chapter-item:hover {
+/* .chapter-item:hover {
     background-color: #edf2f7;
-}
+} */
 
 .chapter-name {
     font-weight: 500;
