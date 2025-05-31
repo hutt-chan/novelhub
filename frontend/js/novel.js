@@ -42,8 +42,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Hiển thị danh sách chương
-        const chapterList = document.getElementById('chapterList');
-        novel.chapters.forEach(chapter => {
+        // const chapterList = document.getElementById('chapterList');
+        // novel.chapters.forEach(chapter => {
+        //     const chapterDiv = document.createElement('div');
+        //     chapterDiv.className = 'chapter-item';
+        //     chapterDiv.innerHTML = `
+        //         <a href="chapter.html?novel_id=${novel.id}&chapter_id=${chapter.id}">${chapter.name}</a>
+        //         <span>${new Date(chapter.date).toLocaleDateString()}</span>
+        //     `;
+        //     chapterList.appendChild(chapterDiv);
+        // });
+
+
+        // Xử lý nút Start Reading
+        // document.getElementById('startReadingBtn').addEventListener('click', () => {
+        //     if (novel.chapters.length > 0) {
+        //         window.location.href = `chapter.html?novel_id=${novel.id}&chapter_id=${novel.chapters[0].id}`;
+        //     }
+        // });
+
+                // Sắp xếp chương
+        const sortedChapters = [...novel.chapters].sort((a, b) => {
+            const getNum = (title) => parseInt(title.match(/\d+/)?.[0] || 0);
+            return getNum(a.name) - getNum(b.name);
+        });
+
+        // Hiển thị chương (sắp xếp theo thứ tự mong muốn)
+        sortedChapters.forEach(chapter => {
             const chapterDiv = document.createElement('div');
             chapterDiv.className = 'chapter-item';
             chapterDiv.innerHTML = `
@@ -53,12 +78,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             chapterList.appendChild(chapterDiv);
         });
 
-        // Xử lý nút Start Reading
+        // Nút Start Reading → chương đầu tiên
         document.getElementById('startReadingBtn').addEventListener('click', () => {
-            if (novel.chapters.length > 0) {
-                window.location.href = `chapter.html?novel_id=${novel.id}&chapter_id=${novel.chapters[0].id}`;
+            if (sortedChapters.length > 0) {
+                const firstChapter = sortedChapters[0];
+                window.location.href = `chapter.html?novel_id=${novel.id}&chapter_id=${firstChapter.id}`;
             }
         });
+
 
         // Xử lý Bookmark
         const bookmarkBtn = document.getElementById('bookmarkBtn');

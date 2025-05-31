@@ -463,7 +463,7 @@ app.delete('/api/comments/:id', authenticateToken, restrictTo(['admin']), async 
 });
 
 // Lấy nội dung chương cụ thể
-app.get('/api/chapters/:novel_id/:chapter_id', authenticateToken, async (req, res) => {
+app.get('/api/chapters/:novel_id/:chapter_id', async (req, res) => {
     const { novel_id, chapter_id } = req.params;
 
     try {
@@ -483,7 +483,7 @@ app.get('/api/chapters/:novel_id/:chapter_id', authenticateToken, async (req, re
 });
 
 // Lấy danh sách chương của một tiểu thuyết
-app.get('/api/novels/:novel_id/chapters', authenticateToken, async (req, res) => {
+app.get('/api/novels/:novel_id/chapters', async (req, res) => {
     const { novel_id } = req.params;
 
     try {

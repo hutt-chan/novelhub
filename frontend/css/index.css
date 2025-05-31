@@ -1,0 +1,130 @@
+/* Novel Grid */
+.novel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.novel-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.novel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.novel-cover {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.novel-info {
+    padding: 1rem;
+}
+
+.novel-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.novel-author {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.novel-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #95a5a6;
+}
+
+.novel-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.bookmark-btn, .favorite-btn {
+    position: absolute;
+    bottom: 10px;
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.bookmark-btn {
+    right: 10px;
+}
+
+.favorite-btn {
+    right: 50px;
+}
+
+.bookmark-btn:hover, .favorite-btn:hover {
+    background-color: white;
+    transform: scale(1.1);
+}
+
+.bookmark-btn i, .favorite-btn i {
+    color: #7f8c8d;
+    transition: all 0.3s ease;
+}
+
+.bookmark-btn:hover i, .bookmark-btn.active i {
+    color: #e74c3c;
+}
+
+.favorite-btn:hover i, .favorite-btn.active i {
+    color: #e74c3c;
+}
+
+.favorite-count {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Color themes for novel covers */
+.theme-1 { background-color: #3498db; }
+.theme-2 { background-color: #2ecc71; }
+.theme-3 { background-color: #9b59b6; }
+.theme-4 { background-color: #f1c40f; }
+.theme-5 { background-color: #e74c3c; }
+.theme-6 { background-color: #1abc9c; }
+
+@media (max-width: 576px) {
+    .novel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
