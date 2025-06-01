@@ -1,19 +1,23 @@
 // Lấy novel_id và chapter_id từ URL
 const getParams = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    return {
-        novelId: urlParams.get('novel_id'),
-        chapterId: urlParams.get('chapter_id')
-    };
+    const novelId = urlParams.get('novel_id');
+    const chapterId = urlParams.get('chapter_id');
+    console.log('URL Params:', { novelId, chapterId });
+    return { novelId, chapterId };
 };
 
 // Gọi API lấy nội dung chương
 async function fetchChapter(novelId, chapterId, token) {
+    console.log('Fetching chapter:', { novelId, chapterId });
     try {
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
         const response = await fetch(`http://localhost:3000/api/chapters/${novelId}/${chapterId}`, { headers });
+        console.log('Chapter response status:', response.status);
         if (!response.ok) throw new Error(`Không thể tải chương: ${response.status}`);
-        return await response.json();
+        const data = await response.json();
+        console.log('Chapter data:', data);
+        return data;
     } catch (error) {
         console.error('Lỗi khi lấy chương:', error);
         return null;
@@ -22,11 +26,15 @@ async function fetchChapter(novelId, chapterId, token) {
 
 // Gọi API lấy danh sách chương
 async function fetchChapterList(novelId, token) {
+    console.log('Fetching chapter list for novelId:', novelId);
     try {
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
         const response = await fetch(`http://localhost:3000/api/novels/${novelId}/chapters`, { headers });
+        console.log('Chapter list response status:', response.status);
         if (!response.ok) throw new Error(`Không thể tải danh sách chương: ${response.status}`);
-        return await response.json();
+        const data = await response.json();
+        console.log('Chapter list data:', data);
+        return data;
     } catch (error) {
         console.error('Lỗi khi lấy danh sách chương:', error);
         return [];
@@ -37,24 +45,45 @@ async function fetchChapterList(novelId, token) {
 function updateNavigation(novelId, chapterId, chapters) {
     const prevBtn = document.getElementById('prevChapter');
     const nextBtn = document.getElementById('nextChapter');
-    const currentIndex = chapters.findIndex(ch => ch.id == chapterId);
+    
+    // Ép kiểu chapterId thành số
+    const chapterIdNum = parseInt(chapterId);
+    console.log('updateNavigation:', { novelId, chapterId, chapterIdNum, chapters });
+    
+    // Kiểm tra nút có tồn tại không
+    if (!prevBtn || !nextBtn) {
+        console.error('Navigation buttons not found:', { prevBtn, nextBtn });
+        return;
+    }
 
+    // Tìm chỉ số chương hiện tại
+    const currentIndex = chapters.findIndex(ch => ch.id === chapterIdNum);
+    console.log('Current chapter index:', currentIndex);
+
+    // Cập nhật nút Chương trước
     if (currentIndex > 0) {
         prevBtn.disabled = false;
         prevBtn.onclick = () => {
-            window.location.href = `chapter.html?novel_id=${novelId}&chapter_id=${chapters[currentIndex - 1].id}`;
+            const prevChapterId = chapters[currentIndex - 1].id;
+            console.log('Navigating to previous chapter:', prevChapterId);
+            window.location.href = `chapter.html?novel_id=${novelId}&chapter_id=${prevChapterId}`;
         };
     } else {
         prevBtn.disabled = true;
+        console.log('No previous chapter');
     }
 
+    // Cập nhật nút Chương sau
     if (currentIndex < chapters.length - 1 && currentIndex !== -1) {
         nextBtn.disabled = false;
         nextBtn.onclick = () => {
-            window.location.href = `chapter.html?novel_id=${novelId}&chapter_id=${chapters[currentIndex + 1].id}`;
+            const nextChapterId = chapters[currentIndex + 1].id;
+            console.log('Navigating to next chapter:', nextChapterId);
+            window.location.href = `chapter.html?novel_id=${novelId}&chapter_id=${nextChapterId}`;
         };
     } else {
         nextBtn.disabled = true;
+        console.log('No next chapter');
     }
 }
 
@@ -72,14 +101,13 @@ function highlightNavLink() {
 
 // Khởi tạo trang
 async function init() {
-    // Khởi tạo auth (từ auth.js)
     await initAuth();
-
     const token = localStorage.getItem('token');
     const { novelId, chapterId } = getParams();
 
     const chapterText = document.querySelector('.chapter-text');
     if (!novelId || !chapterId || chapterId === 'undefined') {
+        console.log('Invalid params:', { novelId, chapterId });
         chapterText.className = 'chapter-text error';
         chapterText.textContent = 'Thiếu thông tin tiểu thuyết hoặc chương';
         return;
@@ -102,8 +130,12 @@ async function init() {
     if (chapters.length) {
         updateNavigation(novelId, chapterId, chapters);
     } else {
-        chapterText.className = 'chapter-text error';
-        chapterText.textContent = 'Không có danh sách chương';
+        console.log('No chapters found for novelId:', novelId);
+        // Không ghi đè nội dung chương nếu đã tải được
+        chapterText.className = chapter ? 'chapter-text' : 'chapter-text error';
+        if (!chapter) {
+            chapterText.textContent = 'Không có danh sách chương';
+        }
     }
 }
 
