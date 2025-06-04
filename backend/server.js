@@ -8,19 +8,34 @@ const chaptersRoutes = require('./routes/chapters');
 const favoritesRoutes = require('./routes/favorites');
 const adminRoutes = require('./routes/admin');
 const commentsRoutes = require('./routes/comments');
+const usersRouter = require('./routes/users');
+// const historyRouter = require('./routes/history'); 
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/api', authRoutes);
+
 app.use('/api/novels', novelsRoutes);
 app.use('/api/bookmarks', bookmarksRoutes);
 app.use('/api/chapters', chaptersRoutes);
 app.use('/api/favorites', favoritesRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/comments', commentsRoutes);
+app.use('/api/users', usersRouter);
 
+app.use('/api', authRoutes);
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route không tồn tại' });
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Lỗi server', details: err.message });
+});
+
+// app.use('/api/history', historyRouter);
 async function searchNovels(query) {
     if (!query || query.length < 2) return [];
     try {

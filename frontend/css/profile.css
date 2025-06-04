@@ -1,0 +1,72 @@
+/* Trong test.css */
+.profile-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-info, .profile-update, .profile-actions {
+    margin-bottom: 30px;
+}
+
+.profile-info h3, .profile-update h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.info-item {
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.info-item label {
+    font-weight: 500;
+    color: #7f8c8d;
+    margin-right: 10px;
+}
+
+.info-item span {
+    color: #2c3e50;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #7f8c8d;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.form-submit {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.form-submit:hover {
+    background-color: #2980b9;
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}

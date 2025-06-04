@@ -57,7 +57,7 @@ function updateNavigation(novelId, chapterId, chapters) {
     }
 
     // Tìm chỉ số chương hiện tại
-    const currentIndex = chapters.findIndex(ch => ch.id === chapterIdNum);
+    const currentIndex = chapters.findIndex(ch => ch.id.toString() === chapterIdNum);
     console.log('Current chapter index:', currentIndex);
 
     // Cập nhật nút Chương trước

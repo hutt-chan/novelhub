@@ -9,6 +9,7 @@ function authenticateToken(req, res, next) {
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) return res.status(403).json({ error: 'Token không hợp lệ' });
         req.user = user;
+        console.log('Decoded JWT payload (req.user):', user);
         next();
     });
 }

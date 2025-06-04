@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - NovelHub</title>
+    <link rel="stylesheet" href="css/test.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: white;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 600;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+
+        .nav-links i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            min-height: 100vh;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+            font-weight: 500;
+        }
+
+        .user-name {
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+
+        .auth-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .auth-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .history-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .novel-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .novel-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .novel-title {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .novel-genre {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .continue-reading {
+            font-size: 0.9em;
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .continue-reading:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-book-open"></i>
+            <span>NovelHub</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="favorites.html" class="nav-link">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+            </a>
+            <a href="history.html" class="nav-link active">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="categories.html" class="nav-link">
+                <i class="fas fa-list"></i>
+                <span>Categories</span>
+            </a>
+            <a href="profile.html" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Auth Buttons (giả lập đã đăng nhập) -->
+        <div class="auth-container">
+            <div class="user-info">
+                <div class="user-avatar">R</div>
+                <span class="user-name">reader1 (User)</span>
+            </div>
+            <button class="auth-btn logout-btn" onclick="alert('Logged out! Please reload the page.')">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+            </button>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-content">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i>
+                Reading History
+            </h2>
+            <div class="history-list">
+                <!-- Novel Card 1 -->
+                <div class="novel-card" onclick="alert('Continuing The Lost Kingdom at Chapter 5! (This is a mock action)')">
+                    <div class="novel-title">The Lost Kingdom</div>
+                    <div class="novel-genre">Fantasy</div>
+                    <div class="continue-reading">Tiếp tục đọc chương 5</div>
+                </div>
+                <!-- Novel Card 2 -->
+                <div class="novel-card" onclick="alert('Continuing Silent Shadows at Chapter 3! (This is a mock action)')">
+                    <div class="novel-title">Silent Shadows</div>
+                    <div class="novel-genre">Mystery</div>
+                    <div class="continue-reading">Tiếp tục đọc chương 3</div>
+                </div>
+                <!-- Novel Card 3 -->
+                <div class="novel-card" onclick="alert('Continuing Starfall at Chapter 7! (This is a mock action)')">
+                    <div class="novel-title">Starfall</div>
+                    <div class="novel-genre">Sci-Fi</div>
+                    <div class="continue-reading">Tiếp tục đọc chương 7</div>
+                </div>
+                <!-- Novel Card 4 -->
+                <div class="novel-card" onclick="alert('Continuing Eternal Love at Chapter 2! (This is a mock action)')">
+                    <div class="novel-title">Eternal Love</div>
+                    <div class="novel-genre">Romance</div>
+                    <div class="continue-reading">Tiếp tục đọc chương 2</div>
+                </div>
+                <!-- Novel Card 5 -->
+                <div class="novel-card" onclick="alert('Continuing Dark Secrets at Chapter 4! (This is a mock action)')">
+                    <div class="novel-title">Dark Secrets</div>
+                    <div class="novel-genre">Thriller</div>
+                    <div class="continue-reading">Tiếp tục đọc chương 4</div>
+                </div>
+                <!-- Novel Card 6 -->
+                <div class="novel-card" onclick="alert('Continuing Echoes of Time at Chapter 6! (This is a mock action)')">
+                    <div class="novel-title">Echoes of Time</div>
+                    <div class="novel-genre">Adventure</div>
+                    <div class="continue-reading">Tiếp tục đọc chương 6</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

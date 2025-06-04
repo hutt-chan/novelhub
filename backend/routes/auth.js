@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Các route khác (giữ nguyên)
+
 router.get('/user', authenticateToken, async (req, res) => {
     res.json({ user: req.user });
 });

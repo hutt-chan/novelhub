@@ -171,6 +171,11 @@ function renderFavorites(favorites) {
 }
 
 function renderNovelCards(novels, container, showStats = false) {
+    if (!container) {
+        console.error('Container is null. Cannot render novel cards.');
+        return; // Thoát hàm nếu container không tồn tại
+    }
+    
     container.innerHTML = '';
     if (!novels.length) {
         container.innerHTML = '<div class="no-novels">No novels available</div>';

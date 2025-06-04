@@ -1,62 +1,74 @@
 const express = require('express');
 const { connectDB } = require('../config/db');
-const { authenticateToken, restrictTo } = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 const router = express.Router();
 
-router.post('/', authenticateToken, restrictTo(['user', 'admin']), async (req, res) => {
-    const { novel_id, content, rating } = req.body;
-    if (!novel_id || !content || !rating) {
-        return res.status(400).json({ error: 'Vui lòng điền đầy đủ thông tin' });
+// GET /api/comments/:novel_id - Lấy danh sách bình luận
+router.get('/:novel_id', async (req, res) => {
+    let { novel_id } = req.params;
+    
+    console.log(`[${new Date().toISOString()}] GET comments for novel_id: ${novel_id}`);
+    
+    novel_id = parseInt(novel_id);
+    if (isNaN(novel_id)) {
+        console.log(`[${new Date().toISOString()}] Invalid novel_id: ${novel_id}`);
+        return res.status(400).json({ error: 'novel_id không hợp lệ' });
     }
-    if (rating < 1 || rating > 5) {
-        return res.status(400).json({ error: 'Đánh giá phải từ 1 đến 5' });
+
+    try {
+        const db = await connectDB();
+        const [comments] = await db.execute(
+            `SELECT c.id, c.novel_id, c.user_id, u.username, c.content, c.created_at
+             FROM Comments c
+             JOIN Users u ON c.user_id = u.id
+             WHERE c.novel_id = ?
+             ORDER BY c.created_at DESC`,
+            [novel_id]
+        );
+        
+        console.log(`[${new Date().toISOString()}] Comments for novel_id ${novel_id}:`, comments);
+        res.json({comments}); // Trả về mảng trực tiếp
+    } catch (error) {
+        console.error(`[${new Date().toISOString()}] Lỗi khi lấy bình luận:`, error);
+        res.status(500).json({ error: 'Lỗi khi lấy bình luận', details: error.message });
+    }
+});
+
+// POST /api/comments/:novel_id - Gửi bình luận mới
+router.post('/:novel_id', authenticateToken, async (req, res) => {
+    let { novel_id } = req.params;
+    const { content } = req.body;
+    const user_id = req.user.id;
+    
+    console.log(`[${new Date().toISOString()}] POST comment for novel_id: ${novel_id}, user_id: ${user_id}, content: ${content}`);
+
+    novel_id = parseInt(novel_id);
+    if (isNaN(novel_id)) {
+        console.log(`[${new Date().toISOString()}] Invalid novel_id: ${novel_id}`);
+        return res.status(400).json({ error: 'novel_id không hợp lệ' });
+    }
+    
+    if (!content || content.trim().length === 0) {
+        return res.status(400).json({ error: 'Nội dung bình luận không được để trống' });
+    }
+
+    if (!user_id) {
+        console.log(`[${new Date().toISOString()}] Missing user_id`);
+        return res.status(400).json({ error: 'user_id không hợp lệ' });
     }
 
     try {
         const db = await connectDB();
         await db.execute(
-            'INSERT INTO Comments (novel_id, user_id, content, rating) VALUES (?, ?, ?, ?)',
-            [novel_id, req.user.id, content, rating]
+            'INSERT INTO Comments (novel_id, user_id, content, created_at) VALUES (?, ?, ?, NOW())',
+            [novel_id, user_id, content.trim()]
         );
-
-        const [novelRatings] = await db.execute(
-            'SELECT AVG(rating) as avg_rating FROM Comments WHERE novel_id = ?',
-            [novel_id]
-        );
-        const avgRating = parseFloat(novelRatings[0].avg_rating) || 0;
-        await db.execute('UPDATE Novels SET rating = ? WHERE id = ?', [avgRating.toFixed(1), novel_id]);
-
-        res.status(201).json({ message: 'Thêm bình luận thành công' });
+        
+        console.log(`[${new Date().toISOString()}] Comment added for novel_id ${novel_id}`);
+        res.status(201).json({ message: 'Bình luận đã được gửi' });
     } catch (error) {
-        console.error('Lỗi khi thêm bình luận:', error);
-        res.status(500).json({ error: 'Lỗi khi thêm bình luận' });
-    }
-});
-
-router.delete('/:id', authenticateToken, restrictTo(['admin']), async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const db = await connectDB();
-        const [comments] = await db.execute('SELECT novel_id FROM Comments WHERE id = ?', [id]);
-        if (!comments[0]) {
-            return res.status(404).json({ error: 'Bình luận không tồn tại' });
-        }
-
-        const novel_id = comments[0].novel_id;
-        await db.execute('DELETE FROM Comments WHERE id = ?', [id]);
-
-        const [novelRatings] = await db.execute(
-            'SELECT AVG(rating) as avg_rating FROM Comments WHERE novel_id = ?',
-            [novel_id]
-        );
-        const avgRating = parseFloat(novelRatings[0].avg_rating) || 0;
-        await db.execute('UPDATE Novels SET rating = ? WHERE id = ?', [avgRating.toFixed(1), novel_id]);
-
-        res.json({ message: 'Xóa bình luận thành công' });
-    } catch (error) {
-        console.error('Lỗi khi xóa bình luận:', error);
-        res.status(500).json({ error: 'Lỗi khi xóa bình luận' });
+        console.error(`[${new Date().toISOString()}] Lỗi khi gửi bình luận:`, error);
+        res.status(500).json({ error: 'Lỗi khi gửi bình luận', details: error.message });
     }
 });
 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - NovelHub</title>
+    <link rel="stylesheet" href="css/test.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* CSS inline bổ sung cho giao diện tạm thời */
+        .categories-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .category-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .category-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .category-name {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .category-count {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+            font-weight: 500;
+        }
+
+        .user-name {
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+
+        .auth-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .auth-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <span>NovelHub</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="favorites.html" class="nav-link">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="#" class="nav-link active">
+                <i class="fas fa-list"></i>
+                <span>Categories</span>
+            </a>
+            <a href="profile.html" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Auth Buttons (giả lập đã đăng nhập) -->
+        <div class="auth-container">
+            <div class="user-info">
+                <div class="user-avatar">R</div>
+                <span class="user-name">reader1 (User)</span>
+            </div>
+            <button class="auth-btn logout-btn" onclick="alert('Logged out! Please reload the page.')">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+            </button>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="categories-content">
+            <h2 class="section-title">
+                <i class="fas fa-list"></i>
+                Categories
+            </h2>
+            <div class="category-list">
+                <!-- Category Item 1 -->
+                <div class="category-item" onclick="alert('Viewing Romance novels! (This is a mock action)')">
+                    <div class="category-name">Romance</div>
+                    <div class="category-count">15 novels</div>
+                </div>
+                <!-- Category Item 2 -->
+                <div class="category-item" onclick="alert('Viewing Fantasy novels! (This is a mock action)')">
+                    <div class="category-name">Fantasy</div>
+                    <div class="category-count">22 novels</div>
+                </div>
+                <!-- Category Item 3 -->
+                <div class="category-item" onclick="alert('Viewing Mystery novels! (This is a mock action)')">
+                    <div class="category-name">Mystery</div>
+                    <div class="category-count">10 novels</div>
+                </div>
+                <!-- Category Item 4 -->
+                <div class="category-item" onclick="alert('Viewing Sci-Fi novels! (This is a mock action)')">
+                    <div class="category-name">Sci-Fi</div>
+                    <div class="category-count">8 novels</div>
+                </div>
+                <!-- Category Item 5 -->
+                <div class="category-item" onclick="alert('Viewing Thriller novels! (This is a mock action)')">
+                    <div class="category-name">Thriller</div>
+                    <div class="category-count">12 novels</div>
+                </div>
+                <!-- Category Item 6 -->
+                <div class="category-item" onclick="alert('Viewing Adventure novels! (This is a mock action)')">
+                    <div class="category-name">Adventure</div>
+                    <div class="category-count">18 novels</div>
+                </div>
+                <!-- Category Item 7 -->
+                <div class="category-item" onclick="alert('Viewing Historical novels! (This is a mock action)')">
+                    <div class="category-name">Historical</div>
+                    <div class="category-count">9 novels</div>
+                </div>
+                <!-- Category Item 8 -->
+                <div class="category-item" onclick="alert('Viewing Horror novels! (This is a mock action)')">
+                    <div class="category-name">Horror</div>
+                    <div class="category-count">7 novels</div>
+                </div>
+                <!-- Category Item 9 -->
+                <div class="category-item" onclick="alert('Viewing Comedy novels! (This is a mock action)')">
+                    <div class="category-name">Comedy</div>
+                    <div class="category-count">14 novels</div>
+                </div>
+                <!-- Category Item 10 -->
+                <div class="category-item" onclick="alert('Viewing Drama novels! (This is a mock action)')">
+                    <div class="category-name">Drama</div>
+                    <div class="category-count">11 novels</div>
+                </div>
+                <!-- Category Item 11 -->
+                <div class="category-item" onclick="alert('Viewing Action novels! (This is a mock action)')">
+                    <div class="category-name">Action</div>
+                    <div class="category-count">16 novels</div>
+                </div>
+                <!-- Category Item 12 -->
+                <div class="category-item" onclick="alert('Viewing Crime novels! (This is a mock action)')">
+                    <div class="category-name">Crime</div>
+                    <div class="category-count">13 novels</div>
+                </div>
+                <!-- Category Item 13 -->
+                <div class="category-item" onclick="alert('Viewing Biography novels! (This is a mock action)')">
+                    <div class="category-name">Biography</div>
+                    <div class="category-count">6 novels</div>
+                </div>
+                <!-- Category Item 14 -->
+                <div class="category-item" onclick="alert('Viewing Young Adult novels! (This is a mock action)')">
+                    <div class="category-name">Young Adult</div>
+                    <div class="category-count">20 novels</div>
+                </div>
+                <!-- Category Item 15 -->
+                <div class="category-item" onclick="alert('Viewing Dystopian novels! (This is a mock action)')">
+                    <div class="category-name">Dystopian</div>
+                    <div class="category-count">5 novels</div>
+                </div>
+                <!-- Category Item 16 -->
+                <div class="category-item" onclick="alert('Viewing Supernatural novels! (This is a mock action)')">
+                    <div class="category-name">Supernatural</div>
+                    <div class="category-count">10 novels</div>
+                </div>
+                <!-- Category Item 17 -->
+                <div class="category-item" onclick="alert('Viewing Urban Fantasy novels! (This is a mock action)')">
+                    <div class="category-name">Urban Fantasy</div>
+                    <div class="category-count">8 novels</div>
+                </div>
+                <!-- Category Item 18 -->
+                <div class="category-item" onclick="alert('Viewing Psychological novels! (This is a mock action)')">
+                    <div class="category-name">Psychological</div>
+                    <div class="category-count">9 novels</div>
+                </div>
+                <!-- Category Item 19 -->
+                <div class="category-item" onclick="alert('Viewing Sports novels! (This is a mock action)')">
+                    <div class="category-name">Sports</div>
+                    <div class="category-count">4 novels</div>
+                </div>
+                <!-- Category Item 20 -->
+                <div class="category-item" onclick="alert('Viewing Non-Fiction novels! (This is a mock action)')">
+                    <div class="category-name">Non-Fiction</div>
+                    <div class="category-count">12 novels</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
