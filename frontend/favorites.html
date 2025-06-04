@@ -1,198 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novel - Favorites</title>
-    <link rel="stylesheet" href="css/test.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
-    <!-- Sidebar -->
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Favorites | NovelHub</title>
+    <link rel="stylesheet" href="css/test.css" />
+    <link rel="stylesheet" href="css/favorite.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Sidebar giống các trang khác -->
     <div class="sidebar">
-        <div class="logo-container">
-            <div class="logo">
-                <i class="fas fa-book-open logo-icon"></i>
-                <span>NovelHub</span>
-            </div>
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-book-open logo-icon"></i>
+          <span>NovelHub</span>
         </div>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">
+      </div>
+      <div class="nav-links">
+            <a href="index.html" class="nav-link active">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="favorites.html" class="nav-link active">
+            <a href="favorites.html" class="nav-link">
                 <i class="fas fa-heart"></i>
                 <span>Favorites</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="history.html" class="nav-link">
                 <i class="fas fa-history"></i>
                 <span>History</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="bookmark.html" class="nav-link">
                 <i class="fas fa-bookmark"></i>
                 <span>Bookmarks</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="categories.html" class="nav-link">
                 <i class="fas fa-list"></i>
                 <span>Categories</span>
             </a>
-            <a href="#" class="nav-link">
+            <a href="profile.html" class="nav-link">
                 <i class="fas fa-user"></i>
                 <span>Profile</span>
             </a>
         </div>
     </div>
-
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Auth Buttons -->
-        <div class="auth-container" id="authContainer"></div>
-
-        <!-- Search Bar -->
-        <!-- <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-bar" placeholder="Search for novels or authors">
-        </div> -->
-
-        <!-- Favorites Section -->
-        <div id="favorites">
-            <h2 class="section-title">
-                <i class="fas fa-heart"></i>
-                Your Favorites
-            </h2>
-            <div class="favorites-message" style="display: none; text-align: center; color: #95a5a6;">
-                No favorites yet.
-            </div>
-            <div class="loading" style="display: none; text-align: center; padding: 20px; color: #95a5a6;">
-                Loading...
-            </div>
-            <div class="novel-grid"></div>
-        </div>
+      <!-- Auth Buttons -->
+      <div class="auth-container" id="authContainer"></div>
+      <!-- Favorites Section -->
+      <div id="favorites">
+        <h2 class="section-title">
+          <i class="fas fa-heart"></i>
+          Your Favorites
+        </h2>
+        <div id="favoriteList" class="novel-list"></div>
+      </div>
     </div>
-
-    <!-- Novel Detail Modal -->
-    <div class="modal-overlay" id="novelModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Novel Title</h2>
-                <button class="modal-close">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-cover"></div>
-                <div class="modal-info">
-                    <p class="modal-author">By Author Name</p>
-                    <div class="modal-stats">
-                        <div class="modal-stat">
-                            <i class="fas fa-eye"></i>
-                            <span class="view-count">0</span> Views
-                        </div>
-                        <div class="modal-stat">
-                            <i class="fas fa-book"></i>
-                            <span class="chapter-count">0</span> Chapters
-                        </div>
-                        <div class="modal-stat">
-                            <i class="fas fa-heart"></i>
-                            <span class="favorite-count">0</span> Favorites
-                        </div>
-                    </div>
-                    <div class="modal-genres"></div>
-                    <p class="modal-description"></p>
-                    <div class="modal-buttons">
-                        <button class="modal-btn primary-btn">
-                            <i class="fas fa-book-open"></i>
-                            Start Reading
-                        </button>
-                        <button class="modal-btn secondary-btn bookmark-modal-btn">
-                            <i class="far fa-bookmark"></i>
-                            Add to Bookmarks
-                        </button>
-                        <button class="modal-btn secondary-btn favorite-modal-btn">
-                            <i class="far fa-heart"></i>
-                            Add to Favorites
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-chapters">
-                <h3 class="chapters-title">Latest Chapters</h3>
-                <div class="chapter-list"></div>
-            </div>
-            <div class="modal-comments">
-                <h3 class="comments-title">Comments</h3>
-                <div class="comment-message" style="display: none; text-align: center; color: #95a5a6;">
-                    No comments yet.
-                </div>
-                <form id="commentForm">
-                    <div class="form-group">
-                        <label for="commentContent" class="form-label">Comment</label>
-                        <textarea id="commentContent" class="form-input" placeholder="Write your comment..." required></textarea>
-                    </div>
-                    <button type="submit" class="form-submit">Submit Comment</button>
-                </form>
-                <div class="comment-list"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sign In Modal -->
-    <div class="modal-overlay auth-modal" id="signinModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Sign In</h2>
-                <button class="modal-close">×</button>
-            </div>
-            <form class="auth-form" id="signinForm">
-                <div class="form-group">
-                    <label for="signinEmail" class="form-label">Email</label>
-                    <input type="email" id="signinEmail" class="form-input" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="signinPassword" class="form-label">Password</label>
-                    <input type="password" id="signinPassword" class="form-input" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="form-submit">Sign In</button>
-                <div class="form-footer">
-                    Don't have an account? <a id="switchToSignup">Sign up</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Sign Up Modal -->
-    <div class="modal-overlay auth-modal" id="signupModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Sign Up</h2>
-                <button class="modal-close">×</button>
-            </div>
-            <form class="auth-form" id="signupForm">
-                <div class="form-group">
-                    <label for="signupUsername" class="form-label">Username</label>
-                    <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupEmail" class="form-label">Email</label>
-                    <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword" class="form-label">Password</label>
-                    <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" id="signupConfirmPassword" class="form-input" placeholder="Confirm your password" required>
-                </div>
-                <button type="submit" class="form-submit">Sign Up</button>
-                <div class="form-footer">
-                    Already have an account? <a id="switchToSignin">Sign in</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script src="js/auth.js"></script>
     <script src="js/favorites.js"></script>
-</body>
+  </body>
 </html>

@@ -118,6 +118,88 @@ document.addEventListener('DOMContentLoaded', async () => {
         //     }
         // });
 
+        // Xử lý Bookmark
+        const bookmarkBtn = document.getElementById('bookmarkBtn');
+        if (!bookmarkBtn) return;
+
+        bookmarkBtn.addEventListener('click', async function() {
+            if (!token) {
+                alert('Hãy đăng nhập');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Lấy thông tin truyện từ DOM hoặc biến JS
+            const params = new URLSearchParams(window.location.search);
+            const novel_id = params.get('novel_id');
+            const novelTitle = document.getElementById('novelTitle')?.textContent || '';
+            const coverUrl = document.getElementById('novelCover')?.style.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '') || '';
+
+            // Gửi lên server (API backend)
+            try {
+                const res = await fetch('http://localhost:3000/api/bookmarks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ novel_id })
+                });
+                if (res.ok) {
+                    alert('Đã đánh dấu truyện!');
+                } else {
+                    const data = await res.json();
+                    alert(data.message || 'Có lỗi xảy ra khi đánh dấu truyện.');
+                }
+            } catch (e) {
+                alert('Có lỗi xảy ra khi đánh dấu truyện.');
+            }
+        });
+
+        // Xử lý Favorite
+        const favoriteBtn = document.getElementById('favoriteBtn');
+        favoriteBtn.addEventListener('click', async () => {
+            if (!token) {
+                alert('Please sign in to favorite!');
+                return;
+            }
+            try {
+                const method = novel.is_favorited ? 'DELETE' : 'POST';
+                const url = novel.is_favorited ? `/api/favorites/${novel.id}` : '/api/favorites';
+                await fetch(`http://localhost:3000${url}`, {
+                    method,
+                    headers: { 'Content-Type': 'application/json', ...headers },
+                    body: method === 'POST' ? JSON.stringify({ novel_id: novel.id }) : null
+                });
+                novel.is_favorited = !novel.is_favorited;
+                favoriteBtn.querySelector('i').className = novel.is_favorited ? 'fas fa-heart' : 'far fa-heart';
+                alert(novel.is_favorited ? 'Added to Favorites!' : 'Removed from Favorites!');
+                // Lưu vào localStorage
+                let favs = JSON.parse(localStorage.getItem('favoriteNovels') || '[]');
+                if (novel.is_favorited) {
+                    // Thêm nếu chưa có
+                    if (!favs.some(n => n.id == novel.id)) {
+                        favs.unshift({
+                            id: novel.id,
+                            title: novel.title,
+                            coverUrl: novel.coverUrl,
+                            author: novel.author,
+                            description: novel.description,
+                            rating: novel.rating,
+                            views: novel.views,
+                            chapterCount: novel.chapterCount
+                        });
+                    }
+                } else {
+                    // Xóa nếu bỏ thích
+                    favs = favs.filter(n => n.id != novel.id);
+                }
+                localStorage.setItem('favoriteNovels', JSON.stringify(favs));
+            } catch (error) {
+                alert('Error updating favorite!');
+            }
+        });
+
         // Hàm lấy và hiển thị comment
         async function fetchComments(novelId) {
             try {

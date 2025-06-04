@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bookmark | NovelHub</title>
+    <link rel="stylesheet" href="css/test.css" />
+    <link rel="stylesheet" href="css/bookmark.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-book-open logo-icon"></i>
+          <span>NovelHub</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="favorites.html" class="nav-link">
+          <i class="fas fa-heart"></i>
+          <span>Favorites</span>
+        </a>
+        <a href="history.html" class="nav-link">
+          <i class="fas fa-history"></i>
+          <span>History</span>
+        </a>
+        <a href="bookmark.html" class="nav-link active">
+          <i class="fas fa-bookmark"></i>
+          <span>Bookmarks</span>
+        </a>
+        <a href="categories.html" class="nav-link">
+          <i class="fas fa-list"></i>
+          <span>Categories</span>
+        </a>
+        <a href="profile.html" class="nav-link">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Auth Buttons -->
+      <div class="auth-container" id="authContainer"></div>
+      <!-- Favorites Section -->
+      <div id="bookmarks">
+        <h2 class="section-title">
+          <i class="fas fa-bookmark"></i>
+          Bookmarks
+        </h2>
+        <div id="bookmarkList" class="novel-list"></div>
+      </div>
+    </div>
+    <script src="js/bookmarks.js"></script>
+  </body>
+</html>

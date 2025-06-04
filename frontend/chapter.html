@@ -1,80 +1,92 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Novel - Chapter</title>
-    <link rel="stylesheet" href="css/test.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/test.css" />
+    <link rel="stylesheet" href="css/chapter.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <style>
-        #authContainer {
-            display: none !important;
-        }
+      #authContainer {
+        display: none !important;
+      }
     </style>
     <style>
-    .chapter-text {
+      .chapter-text {
         white-space: pre-line;
-    }
-</style>
-
-</head>
-<body>
+      }
+    </style>
+  </head>
+  <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo-container">
-            <div class="logo">
-                <i class="fas fa-book-open logo-icon"></i>
-                <span>NovelHub</span>
-            </div>
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-book-open logo-icon"></i>
+          <span>NovelHub</span>
         </div>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="favorites.html" class="nav-link">
-                <i class="fas fa-heart"></i>
-                <span>Favorites</span>
-            </a>
-            <a href="history.html" class="nav-link">
-                <i class="fas fa-history"></i>
-                <span>History</span>
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-bookmark"></i>
-                <span>Bookmarks</span>
-            </a>
-            <a href="categories.html" class="nav-link">
-                <i class="fas fa-list"></i>
-                <span>Categories</span>
-            </a>
-            <a href="profile.html" class="nav-link">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="favorites.html" class="nav-link">
+          <i class="fas fa-heart"></i>
+          <span>Favorites</span>
+        </a>
+        <a href="history.html" class="nav-link">
+          <i class="fas fa-history"></i>
+          <span>History</span>
+        </a>
+        <a href="bookmark.html" class="nav-link">
+          <i class="fas fa-bookmark"></i>
+          <span>Bookmarks</span>
+        </a>
+        <a href="categories.html" class="nav-link">
+          <i class="fas fa-list"></i>
+          <span>Categories</span>
+        </a>
+        <a href="profile.html" class="nav-link">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Auth Buttons -->
-        <div class="auth-container" id="authContainer"></div>
+      <!-- Auth Buttons -->
+      <div class="auth-container" id="authContainer"></div>
 
-        <div class="chapter-content">
-            <a href="#" class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back</a>
-            <h2 class="chapter-title">Đang tải...</h2>
-            <div class="chapter-text loading">Đang tải nội dung chương...</div>
-            <div class="navigation">
-                <button class="nav-btn" id="prevChapter" disabled>Chương trước</button>
-                <button class="nav-btn" id="nextChapter" disabled>Chương sau</button>
-            </div>
+      <div class="chapter-content">
+        <a href="#" class="back-btn" id="backBtn"
+          ><i class="fas fa-arrow-left"></i> Back</a
+        >
+        <h2 class="chapter-title">Đang tải...</h2>
+        <div class="chapter-text loading">Đang tải nội dung chương...</div>
+        <div class="navigation">
+          <button class="nav-btn" id="prevChapter" disabled>
+            <i class="fas fa-arrow-left"></i> Chương trước
+          </button>
+          <button class="nav-btn" id="nextChapter" disabled>
+            Chương sau <i class="fas fa-arrow-right"></i>
+          </button>
         </div>
+      </div>
     </div>
 
     <!-- Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/chapter.js"> </script>
-</body>
+    <script src="js/chapter.js"></script>
+  </body>
 </html>
