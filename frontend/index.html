@@ -68,7 +68,7 @@
             type="text"
             id="searchInput"
             class="search-input"
-            placeholder="Search for title or author..."
+            placeholder="Search for novels or authors..."
             autocomplete="off"
           />
           <button class="search-btn"><i class="fas fa-search"></i></button>
@@ -106,8 +106,29 @@
         ></div>
         <div class="novel-grid"></div>
       </div>
+
+      <div class="notification-container">
+        <button id="notificationBtn" class="notification-btn">
+          <i class="fas fa-bell"></i>
+          <span
+            id="notificationBadge"
+            class="notification-badge"
+            style="display: none"
+          ></span>
+        </button>
+        <div
+          id="notificationDropdown"
+          class="notification-dropdown"
+          style="display: none"
+        >
+          <div class="notification-header">Notifications</div>
+          <div id="notificationList" class="notification-list"></div>
+        </div>
+      </div>
     </div>
 
+    <!-- Novel Detail Modal -->
+    <!-- Giữ nguyên modal, chỉ cập nhật favorite-count -->
     <div class="modal-overlay" id="novelModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -159,7 +180,7 @@
           </div>
         </div>
         <div class="modal-chapters">
-          <h3 class="chapters-title">Latest Chapters</h3>
+          <h3 class="chapters-title">Chapters</h3>
           <div class="chapter-list">
             <!-- Chapters will be added dynamically -->
           </div>
@@ -282,5 +303,6 @@
     <!-- Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/notifications.js"></script>
   </body>
 </html>
