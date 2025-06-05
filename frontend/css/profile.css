@@ -50,7 +50,7 @@ body {
     color: #2c3e50;
 }
 
-.auth-btn {
+/* .auth-btn {
     background-color: #3498db;
     color: white;
     border: none;
@@ -59,9 +59,9 @@ body {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s;
-}
+} */
 
-.logout-btn {
+/* .logout-btn {
     background-color: transparent;
     color: #e74c3c;
     border-radius: 50px;
@@ -75,7 +75,7 @@ body {
 
 .logout-btn:hover {
     background-color: rgba(231, 76, 60, 0.1);
-}
+} */
 
 .profile-message {
     text-align: center;
