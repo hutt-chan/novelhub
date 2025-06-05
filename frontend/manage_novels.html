@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novel - Manage Novels</title>
+    <link rel="stylesheet" href="./css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <span>NovelHub</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="admin.html" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="manage_novels.html" class="nav-link active">
+                <i class="fas fa-book"></i>
+                <span>Manage Novels</span>
+            </a>
+            <a href="manage_chapters.html" class="nav-link">
+                <i class="fas fa-list"></i>
+                <span>Manage Chapters</span>
+            </a>
+            <a href="manage_users.html" class="nav-link">
+                <i class="fas fa-users-cog"></i>
+                <span>Manage Users</span>
+            </a>
+            <div class="logout-container">
+                <button id="logoutButton" class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="main-content-area">
+        <main class="dashboard-content">
+            <h1>Novels Management</h1>
+            <div class="search-section">
+                <input type="text" id="searchInput" placeholder="Search by title or author..." class="search-input">
+                <button id="searchButton" class="action-button primary-button search-button">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="filterGenre">Filter by Genre:</label>
+                    <select id="filterGenre" class="filter-select">
+                        <option value="">All Genres</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterDate">Filter by Date:</label>
+                    <input type="date" id="filterDate" class="filter-input">
+                </div>
+                <button id="applyFiltersBtn" class="action-button primary-button filter-button">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+                <button id="resetFiltersBtn" class="action-button secondary-button filter-button">
+                    <i class="fas fa-redo"></i> Reset Filters
+                </button>
+            </div>
+
+            <div class="controls-section">
+                <button id="addNewNovelBtn" class="action-button primary-button">
+                    <i class="fas fa-plus"></i> Add New Novel
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Chapters</th>
+                            <th>Genres</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="novelsTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Loading novels...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="addNovelModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" data-modal="addNovelModal">&times;</span>
+                    <h2 id="addModalTitle">Add New Novel</h2>
+                    <form id="addNovelForm">
+                        <div class="form-group">
+                            <label for="addNovelTitle">Title:</label>
+                            <input type="text" id="addNovelTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addNovelAuthor">Author:</label>
+                            <input type="text" id="addNovelAuthor" name="author" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="addNovelDescription">Description:</label>
+                            <textarea id="addNovelDescription" name="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addNovelCoverUrl">Cover URL:</label>
+                            <input type="text" id="addNovelCoverUrl" name="coverUrl">
+                        </div>
+                        <div class="form-group">
+                            <label for="addNovelChapters">Chapters:</label>
+                            <input type="number" id="addNovelChapters" name="chapterCount" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="addGenres">Genres:</label>
+                            <select id="addGenres" name="genres" multiple style="min-height: 100px;"></select>
+                        </div>
+                        <button type="submit" class="action-button primary-button">Add Novel</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="editNovelModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button" data-modal="editNovelModal">&times;</span>
+                    <h2 id="editModalTitle">Edit Novel</h2>
+                    <form id="editNovelForm">
+                        <input type="hidden" id="editNovelId" name="id"> 
+                        <div class="form-group">
+                            <label for="editNovelTitle">Title:</label>
+                            <input type="text" id="editNovelTitle" name="title" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="editNovelAuthor">Author:</label>
+                            <input type="text" id="editNovelAuthor" name="author" required> 
+                        </div>
+                        <div class="form-group">
+                            <label for="editNovelDescription">Description:</label>
+                            <textarea id="editNovelDescription" name="description"></textarea> 
+                        </div>
+                        <div class="form-group">
+                            <label for="editNovelCoverUrl">Cover URL:</label>
+                            <input type="text" id="editNovelCoverUrl" name="coverUrl"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="editNovelChapters">Chapters:</label>
+                            <input type="number" id="editNovelChapters" name="chapterCount" min="0" value="0"> 
+                        </div>
+                        <div class="form-group">
+                            <label for="editGenres">Genres:</label>
+                            <select id="editGenres" name="genres" multiple style="min-height: 100px;"></select> 
+                        </div>
+                        <button type="submit" class="action-button primary-button">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="messageBox" style="display: none;"></div>
+
+        </main>
+    </div>
+    <script src="js/auth.js"></script>
+    <script src="js/manage_novels.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>

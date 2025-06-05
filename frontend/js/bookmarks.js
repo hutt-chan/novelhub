@@ -2,18 +2,17 @@ document.addEventListener("DOMContentLoaded", async function () {
   const bookmarkList = document.getElementById("bookmarkList");
   const token = localStorage.getItem("token");
   if (!token) {
-    alert("Hãy đăng nhập");
-    window.location.href = "index.html";
+    bookmarkList.style.display = 'block';
     return;
   }
   try {
-    // Lấy bookmark từ API backend
+    // Get bookmarks from backend API
     const res = await fetch("http://localhost:3000/api/bookmarks", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const bookmarks = await res.json();
     if (!bookmarks.length) {
-      bookmarkList.innerHTML = "<p>Chưa có truyện nào được đánh dấu.</p>";
+      bookmarkList.innerHTML = "<p>No bookmarks yet.</p>";
       return;
     }
     bookmarkList.innerHTML = bookmarks
@@ -28,17 +27,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                     <div class="favorite-actions">
                       <a class="novel-link" href="novel.html?novel_id=${
                         item.novel_id
-                      }">Xem truyện</a>
+                      }">View Novel</a>
                       <button class="remove-bookmark-btn" data-id="${
                         item.novel_id
-                      }">Bỏ đánh dấu</button>
+                      }">Remove</button>
                     </div>
                 </div>
             </div>
         `
       )
       .join("");
-    // Gán sự kiện cho nút Bỏ đánh dấu
+    // Add event for Remove button
     document.querySelectorAll(".remove-bookmark-btn").forEach((btn) => {
       btn.addEventListener("click", async function () {
         const novel_id = this.getAttribute("data-id");
@@ -51,57 +50,65 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     });
   } catch (e) {
-    bookmarkList.innerHTML = "<p>Lỗi khi tải danh sách bookmark.</p>";
+    bookmarkList.innerHTML = "<p>Error loading bookmarks list.</p>";
   }
 });
 
-document
-  .getElementById("bookmarkBtn")
-  .addEventListener("click", async function () {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Hãy đăng nhập");
-      window.location.href = "index.html";
-      return;
+document.getElementById("bookmarkBtn")?.addEventListener("click", async function () {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Please sign in to bookmark!");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Get novel info from DOM
+  const novel_id = getNovelIdSomehow();
+  const novelTitle = document.getElementById("novelTitle").textContent;
+  const coverUrl = document
+    .getElementById("novelCover")
+    .style.backgroundImage.replace(/^url\(["']?/, "")
+    .replace(/["']?\)$/, "");
+
+  // Send to server (if using backend API)
+  try {
+    const res = await fetch("http://localhost:3000/api/bookmarks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ novel_id }),
+    });
+    if (res.ok) {
+      alert("Bookmarked!");
+    } else {
+      const data = await res.json();
+      alert(data.message || "Error bookmarking novel.");
     }
-
-    // Lấy thông tin truyện từ DOM
-    const novel_id = getNovelIdSomehow(); // Hàm này bạn cần lấy từ URL hoặc biến JS
-    const novelTitle = document.getElementById("novelTitle").textContent;
-    const coverUrl = document
-      .getElementById("novelCover")
-      .style.backgroundImage.replace(/^url\(["']?/, "")
-      .replace(/["']?\)$/, "");
-
-    // Gửi lên server (nếu dùng API backend)
-    try {
-      const res = await fetch("http://localhost:3000/api/bookmarks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ novel_id }),
-      });
-      if (res.ok) {
-        alert("Đã đánh dấu truyện!");
-      } else {
-        const data = await res.json();
-        alert(data.message || "Có lỗi xảy ra khi đánh dấu truyện.");
-      }
-    } catch (e) {
-      alert("Có lỗi xảy ra khi đánh dấu truyện.");
-    }
-
-    // Nếu muốn lưu localStorage (tùy chọn)
-    // let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-    // if (!bookmarks.some(b => b.novel_id == novel_id)) {
-    //     bookmarks.push({ novel_id, novelTitle, coverUrl });
-    //     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-    // }
-  });
+  } catch (e) {
+    alert("Error bookmarking novel.");
+  }
+});
 
 function getNovelIdSomehow() {
   const params = new URLSearchParams(window.location.search);
   return params.get("id");
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  function toggleBookmarkUI() {
+    const isLoggedIn = window.isLoggedIn || localStorage.getItem('token');
+    const msg = document.querySelector('.bookmark-message');
+    const content = document.querySelector('.bookmark-content');
+    if (!isLoggedIn) {
+      msg.style.display = 'block';
+      content.style.display = 'none';
+    } else {
+      msg.style.display = 'none';
+      content.style.display = 'block';
+    }
+  }
+  toggleBookmarkUI();
+  window.addEventListener('loginStateChanged', toggleBookmarkUI);
+});

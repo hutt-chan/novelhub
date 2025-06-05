@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novel - Home</title>
+    <link rel="stylesheet" href="css/test.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <span>NovelHub</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="favorites.html" class="nav-link">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+            </a>
+            <a href="history.html" class="nav-link">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="bookmark.html" class="nav-link">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="categories.html" class="nav-link">
+                <i class="fas fa-list"></i>
+                <span>Categories</span>
+            </a>
+            <a href="profile.html" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Auth Buttons -->
+        <div class="auth-container" id="authContainer">
+            <!-- Will be populated by JS -->
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" placeholder="Search for novels, authors, or genres...">
+        </div>
+
+        <!-- Weekly Featured Section -->
+        <h2 class="section-title">
+            <i class="fas fa-star"></i>
+            Weekly Featured
+        </h2>
+        <div class="novel-grid">
+            <!-- Novel Card 1 -->
+            <div class="novel-card" data-id="1">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/3498db/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">The Silent Guardian</h3>
+                    <p class="novel-author">By Sarah Johnson</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 12.5k</span>
+                        <span><i class="fas fa-star"></i> 4.8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 2 -->
+            <div class="novel-card" data-id="2">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/2ecc71/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn active">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Echoes of Eternity</h3>
+                    <p class="novel-author">By Michael Chen</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 9.8k</span>
+                        <span><i class="fas fa-star"></i> 4.6</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 3 -->
+            <div class="novel-card" data-id="3">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/9b59b6/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Whispers in the Dark</h3>
+                    <p class="novel-author">By Elena Rodriguez</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 7.3k</span>
+                        <span><i class="fas fa-star"></i> 4.5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 4 -->
+            <div class="novel-card" data-id="4">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/f1c40f/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Chronicles of the Forgotten Realm</h3>
+                    <p class="novel-author">By James Wilson</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 5.2k</span>
+                        <span><i class="fas fa-star"></i> 4.7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Updates Section -->
+        <h2 class="section-title">
+            <i class="fas fa-clock"></i>
+            New Updates
+        </h2>
+        <div class="novel-grid">
+            <!-- Novel Card 5 -->
+            <div class="novel-card" data-id="5">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/e74c3c/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">The Last Sorcerer</h3>
+                    <p class="novel-author">By Thomas Wright</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 8.7k</span>
+                        <span><i class="fas fa-star"></i> 4.4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 6 -->
+            <div class="novel-card" data-id="6">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/1abc9c/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Beyond the Horizon</h3>
+                    <p class="novel-author">By Olivia Parker</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 6.9k</span>
+                        <span><i class="fas fa-star"></i> 4.3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 7 -->
+            <div class="novel-card" data-id="7">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/3498db/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn active">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">Shadows of the Past</h3>
+                    <p class="novel-author">By Daniel Kim</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 5.4k</span>
+                        <span><i class="fas fa-star"></i> 4.2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novel Card 8 -->
+            <div class="novel-card" data-id="8">
+                <div class="novel-cover" style="background-image: url('https://via.placeholder.com/200x300/2ecc71/ffffff?text=Novel+Cover');">
+                    <button class="bookmark-btn">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="novel-info">
+                    <h3 class="novel-title">The Immortal's Secret</h3>
+                    <p class="novel-author">By Sophia Lee</p>
+                    <div class="novel-stats">
+                        <span><i class="fas fa-eye"></i> 4.8k</span>
+                        <span><i class="fas fa-star"></i> 4.5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Novel Detail Modal -->
+    <div class="modal-overlay" id="novelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Novel Title</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-cover"></div>
+                <div class="modal-info">
+                    <p class="modal-author">By Author Name</p>
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <i class="fas fa-eye"></i>
+                            <span class="view-count">0</span> Views
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-star"></i>
+                            <span class="rating">0</span> Rating
+                        </div>
+                        <div class="modal-stat">
+                            <i class="fas fa-book"></i>
+                            <span class="chapter-count">0</span> Chapters
+                        </div>
+                    </div>
+                    <div class="modal-genres">
+                        <!-- Genres will be added dynamically -->
+                    </div>
+                    <p class="modal-description">
+                        <!-- Description will be added dynamically -->
+                    </p>
+                    <div class="modal-buttons">
+                        <button class="modal-btn primary-btn">
+                            <i class="fas fa-book-open"></i>
+                            Start Reading
+                        </button>
+                        <button class="modal-btn secondary-btn bookmark-modal-btn">
+                            <i class="far fa-bookmark"></i>
+                            Add to Bookmarks
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-chapters">
+                <h3 class="chapters-title">Latest Chapters</h3>
+                <div class="chapter-list">
+                    <!-- Chapters will be added dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div class="modal-overlay auth-modal" id="signinModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Sign In</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="auth-form" id="signinForm">
+                <div class="form-group">
+                    <label for="signinEmail" class="form-label">Email</label>
+                    <input type="email" id="signinEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signinPassword" class="form-label">Password</label>
+                    <input type="password" id="signinPassword" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="form-submit">Sign In</button>
+                <div class="form-footer">
+                    Don't have an account? <a id="switchToSignup">Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div class="modal-overlay auth-modal" id="signupModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Sign Up</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label for="signupUsername" class="form-label">Username</label>
+                    <input type="text" id="signupUsername" class="form-input" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail" class="form-label">Email</label>
+                    <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword" class="form-label">Password</label>
+                    <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="form-submit">Sign Up</button>
+                <div class="form-footer">
+                    Already have an account? <a id="switchToSignin">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // User authentication state
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Initialize auth state
+        function initAuth() {
+            // Check if user is logged in (in a real app, this would check cookies/localStorage)
+            const savedUser = localStorage.getItem('novelHubUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                isLoggedIn = true;
+            }
+            updateAuthUI();
+        }
+
+        // Update auth UI based on login state
+        function updateAuthUI() {
+            const authContainer = document.getElementById('authContainer');
+            
+            if (isLoggedIn && currentUser) {
+                // User is logged in, show user info and logout button
+                authContainer.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${currentUser.username.charAt(0).toUpperCase()}</div>
+                        <span class="user-name">${currentUser.username}</span>
+                    </div>
+                    <button class="auth-btn logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                `;
+                
+                // Add logout event listener
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            } else {
+                // User is not logged in, show sign in and sign up buttons
+                authContainer.innerHTML = `
+                    <button class="auth-btn signin-btn" id="signinBtn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Sign In
+                    </button>
+                    <button class="auth-btn signup-btn" id="signupBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Sign Up
+                    </button>
+                `;
+                
+                // Add event listeners
+                document.getElementById('signinBtn').addEventListener('click', () => openModal('signinModal'));
+                document.getElementById('signupBtn').addEventListener('click', () => openModal('signupModal'));
+            }
+        }
+
+        // Open modal
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close all modals
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            document.body.style.overflow = '';
+        }
+
+        // Sign in function
+        function signIn(email, password) {
+            // In a real app, this would make an API call to verify credentials
+            // For demo purposes, we'll just simulate a successful login
+            
+            // Simple validation
+            if (!email || !password) {
+                alert('Please enter both email and password');
+                return;
+            }
+            
+            // Create a mock user
+            currentUser = {
+                username: email.split('@')[0],
+                email: email
+            };
+            
+            // Save to localStorage (in a real app, this would be a token)
+            localStorage.setItem('novelHubUser', JSON.stringify(currentUser));
+            
+            isLoggedIn = true;
+            updateAuthUI();
+            closeAllModals();
+            
+            // Show welcome message
+            alert(`Welcome back, ${currentUser.username}!`);
+        }
+
+        // Sign up function
+        function signUp(username, email, password, confirmPassword) {
+            // In a real app, this would make an API call to create a new user
+            
+            // Simple validation
+            if (!username || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            // Create a new user
+            currentUser = {
+                username: username,
+                email: email
+            };
+            
+            // Save to localStorage (in a real app, this would be a token)
+            localStorage.setItem('novelHubUser', JSON.stringify(currentUser));
+            
+            isLoggedIn = true;
+            updateAuthUI();
+            closeAllModals();
+            
+            // Show welcome message
+            alert(`Welcome to NovelHub, ${username}!`);
+        }
+
+        // Logout function
+        function logout() {
+            // Clear user data
+            localStorage.removeItem('novelHubUser');
+            currentUser = null;
+            isLoggedIn = false;
+            
+            // Update UI
+            updateAuthUI();
+            
+            // Show message
+            alert('You have been logged out');
+        }
+
+        // Novel data
+        const novels = [
+            {
+                id: 1,
+                title: "The Silent Guardian",
+                author: "Sarah Johnson",
+                views: "12.5k",
+                rating: 4.8,
+                coverUrl: "https://via.placeholder.com/200x300/3498db/ffffff?text=Novel+Cover",
+                genres: ["Fantasy", "Adventure", "Mystery"],
+                description: "In a world where magic is forbidden, a young orphan discovers she possesses extraordinary powers that could either save the kingdom or destroy it. As she navigates a dangerous path of self-discovery, she must decide whether to embrace her abilities or hide in the shadows.",
+                chapters: [
+                    { name: "Chapter 25: The Awakening", date: "2 days ago" },
+                    { name: "Chapter 24: Shadows in the Mist", date: "1 week ago" },
+                    { name: "Chapter 23: The Council's Decision", date: "2 weeks ago" }
+                ],
+                chapterCount: 25
+            },
+            {
+                id: 2,
+                title: "Echoes of Eternity",
+                author: "Michael Chen",
+                views: "9.8k",
+                rating: 4.6,
+                coverUrl: "https://via.placeholder.com/200x300/2ecc71/ffffff?text=Novel+Cover",
+                genres: ["Sci-Fi", "Romance", "Drama"],
+                description: "When time travel becomes a reality, a brilliant scientist creates a device that allows people to visit their past. But when his own journey reveals dark secrets about his family's history, he becomes obsessed with changing the past, regardless of the consequences to the timeline.",
+                chapters: [
+                    { name: "Chapter 42: Temporal Paradox", date: "1 day ago" },
+                    { name: "Chapter 41: The Butterfly Effect", date: "4 days ago" },
+                    { name: "Chapter 40: Ripples in Time", date: "1 week ago" }
+                ],
+                chapterCount: 42
+            },
+            {
+                id: 3,
+                title: "Whispers in the Dark",
+                author: "Elena Rodriguez",
+                views: "7.3k",
+                rating: 4.5,
+                coverUrl: "https://via.placeholder.com/200x300/9b59b6/ffffff?text=Novel+Cover",
+                genres: ["Horror", "Thriller", "Supernatural"],
+                description: "After moving into an old Victorian mansion, a family begins experiencing strange phenomena. As the whispers in the walls grow louder and the shadows move on their own, they discover the house has a bloody history that refuses to stay buried.",
+                chapters: [
+                    { name: "Chapter 18: The Basement Door", date: "3 days ago" },
+                    { name: "Chapter 17: Midnight Visitors", date: "1 week ago" },
+                    { name: "Chapter 16: The Old Diary", date: "2 weeks ago" }
+                ],
+                chapterCount: 18
+            },
+            {
+                id: 4,
+                title: "Chronicles of the Forgotten Realm",
+                author: "James Wilson",
+                views: "5.2k",
+                rating: 4.7,
+                coverUrl: "https://via.placeholder.com/200x300/f1c40f/ffffff?text=Novel+Cover",
+                genres: ["Epic Fantasy", "Action", "War"],
+                description: "In a realm forgotten by time, five kingdoms battle for supremacy. As ancient prophecies begin to unfold, a reluctant hero emerges from the shadows. With the help of unlikely allies, he must unite the warring kingdoms against a threat that could destroy them all.",
+                chapters: [
+                    { name: "Chapter 35: The Alliance", date: "Yesterday" },
+                    { name: "Chapter 34: The Dragon's Lair", date: "3 days ago" },
+                    { name: "Chapter 33: The Ancient Scroll", date: "1 week ago" }
+                ],
+                chapterCount: 35
+            },
+            {
+                id: 5,
+                title: "The Last Sorcerer",
+                author: "Thomas Wright",
+                views: "8.7k",
+                rating: 4.4,
+                coverUrl: "https://via.placeholder.com/200x300/e74c3c/ffffff?text=Novel+Cover",
+                genres: ["Dark Fantasy", "Magic", "Coming of Age"],
+                description: "As the last practitioner of a dying magical art, Marcus must find an apprentice before his knowledge is lost forever. When he discovers a talented but troubled young woman, he must race against time to train her while evading those who would see magic erased from the world.",
+                chapters: [
+                    { name: "Chapter 29: The First Lesson", date: "2 days ago" },
+                    { name: "Chapter 28: The Hunters", date: "5 days ago" },
+                    { name: "Chapter 27: The Apprentice", date: "1 week ago" }
+                ],
+                chapterCount: 29
+            },
+            {
+                id: 6,
+                title: "Beyond the Horizon",
+                author: "Olivia Parker",
+                views: "6.9k",
+                rating: 4.3,
+                coverUrl: "https://via.placeholder.com/200x300/1abc9c/ffffff?text=Novel+Cover",
+                genres: ["Adventure", "Historical", "Romance"],
+                description: "In the age of exploration, a young cartographer joins an expedition to map uncharted territories. As they sail beyond known waters, they encounter wonders and dangers beyond imagination, and she finds herself torn between her duty to science and her growing feelings for the ship's mysterious captain.",
+                chapters: [
+                    { name: "Chapter 22: Uncharted Waters", date: "4 days ago" },
+                    { name: "Chapter 21: The Island of Mists", date: "1 week ago" },
+                    { name: "Chapter 20: The Captain's Secret", date: "2 weeks ago" }
+                ],
+                chapterCount: 22
+            },
+            {
+                id: 7,
+                title: "Shadows of the Past",
+                author: "Daniel Kim",
+                views: "5.4k",
+                rating: 4.2,
+                coverUrl: "https://via.placeholder.com/200x300/3498db/ffffff?text=Novel+Cover",
+                genres: ["Mystery", "Psychological", "Crime"],
+                description: "A detective with a perfect case record is haunted by the one criminal who got away. When similar crimes begin occurring again after fifteen years, he must confront his past failures and face the possibility that either he was wrong all those years ago, or a copycat is following in a killer's footsteps.",
+                chapters: [
+                    { name: "Chapter 31: The Pattern", date: "Yesterday" },
+                    { name: "Chapter 30: Cold Case", date: "4 days ago" },
+                    { name: "Chapter 29: The Return", date: "1 week ago" }
+                ],
+                chapterCount: 31
+            },
+            {
+                id: 8,
+                title: "The Immortal's Secret",
+                author: "Sophia Lee",
+                views: "4.8k",
+                rating: 4.5,
+                coverUrl: "https://via.placeholder.com/200x300/2ecc71/ffffff?text=Novel+Cover",
+                genres: ["Urban Fantasy", "Romance", "Mystery"],
+                description: "When a journalist investigates a reclusive billionaire who hasn't aged in decades, she uncovers a secret society of immortals living among us. As she delves deeper into their world, she must decide whether to reveal the truth to humanity or protect the secret that could change the world forever.",
+                chapters: [
+                    { name: "Chapter 20: The Society", date: "3 days ago" },
+                    { name: "Chapter 19: The Interview", date: "1 week ago" },
+                    { name: "Chapter 18: The Photograph", date: "2 weeks ago" }
+                ],
+                chapterCount: 20
+            }
+        ];
+
+        // Toggle bookmark functionality
+        document.querySelectorAll('.bookmark-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleBookmark(this);
+            });
+        });
+
+        function toggleBookmark(btn) {
+            btn.classList.toggle('active');
+            
+            const icon = btn.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+        }
+
+        // Novel modal functionality
+        const novelModal = document.getElementById('novelModal');
+        const novelModalClose = novelModal.querySelector('.modal-close');
+        const bookmarkModalBtn = novelModal.querySelector('.bookmark-modal-btn');
+
+        // Close novel modal when clicking the close button
+        novelModalClose.addEventListener('click', function() {
+            closeModal('novelModal');
+        });
+
+        // Close novel modal when clicking outside the modal content
+        novelModal.addEventListener('click', function(e) {
+            if (e.target === novelModal) {
+                closeModal('novelModal');
+            }
+        });
+
+        // Toggle bookmark from modal
+        bookmarkModalBtn.addEventListener('click', function() {
+            const novelId = novelModal.getAttribute('data-novel-id');
+            const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
+            const bookmarkBtn = novelCard.querySelector('.bookmark-btn');
+            
+            toggleBookmark(bookmarkBtn);
+            
+            // Update modal bookmark button
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                this.innerHTML = '<i class="fas fa-bookmark"></i> Remove Bookmark';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                this.innerHTML = '<i class="far fa-bookmark"></i> Add to Bookmarks';
+            }
+        });
+
+        // Make novel cards clickable
+        document.querySelectorAll('.novel-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const novelId = this.getAttribute('data-id');
+                openNovelModal(novelId);
+            });
+        });
+
+        function openNovelModal(novelId) {
+            const novel = novels.find(n => n.id == novelId);
+            
+            if (!novel) return;
+            
+            // Set modal data
+            novelModal.setAttribute('data-novel-id', novelId);
+            novelModal.querySelector('.modal-title').textContent = novel.title;
+            novelModal.querySelector('.modal-cover').style.backgroundImage = `url('${novel.coverUrl}')`;
+            novelModal.querySelector('.modal-author').textContent = `By ${novel.author}`;
+            novelModal.querySelector('.view-count').textContent = novel.views;
+            novelModal.querySelector('.rating').textContent = novel.rating;
+            novelModal.querySelector('.chapter-count').textContent = novel.chapterCount;
+            novelModal.querySelector('.modal-description').textContent = novel.description;
+            
+            // Set bookmark button state
+            const novelCard = document.querySelector(`.novel-card[data-id="${novelId}"]`);
+            const bookmarkBtn = novelCard.querySelector('.bookmark-btn');
+            const bookmarkModalBtn = novelModal.querySelector('.bookmark-modal-btn');
+            
+            if (bookmarkBtn.classList.contains('active')) {
+                bookmarkModalBtn.innerHTML = '<i class="fas fa-bookmark"></i> Remove Bookmark';
+            } else {
+                bookmarkModalBtn.innerHTML = '<i class="far fa-bookmark"></i> Add to Bookmarks';
+            }
+            
+            // Clear and add genres
+            const genresContainer = novelModal.querySelector('.modal-genres');
+            genresContainer.innerHTML = '';
+            novel.genres.forEach(genre => {
+                const genreTag = document.createElement('div');
+                genreTag.className = 'genre-tag';
+                genreTag.textContent = genre;
+                genresContainer.appendChild(genreTag);
+            });
+            
+            // Clear and add chapters
+            const chapterList = novelModal.querySelector('.chapter-list');
+            chapterList.innerHTML = '';
+            novel.chapters.forEach(chapter => {
+                const chapterItem = document.createElement('div');
+                chapterItem.className = 'chapter-item';
+                chapterItem.innerHTML = `
+                    <div class="chapter-name">${chapter.name}</div>
+                    <div class="chapter-date">${chapter.date}</div>
+                `;
+                chapterList.appendChild(chapterItem);
+            });
+            
+            // Show modal
+            openModal('novelModal');
+        }
+
+        // Auth modal functionality
+        const signinModal = document.getElementById('signinModal');
+        const signupModal = document.getElementById('signupModal');
+        
+        // Close buttons for auth modals
+        document.querySelectorAll('.auth-modal .modal-close').forEach(btn => {
+            btn.addEventListener('click', function() {
+                closeAllModals();
+            });
+        });
+
+        // Close auth modals when clicking outside
+        document.querySelectorAll('.auth-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeAllModals();
+                }
+            });
+        });
+
+        // Switch between sign in and sign up
+        document.getElementById('switchToSignup').addEventListener('click', function() {
+            closeModal('signinModal');
+            openModal('signupModal');
+        });
+
+        document.getElementById('switchToSignin').addEventListener('click', function() {
+            closeModal('signupModal');
+            openModal('signinModal');
+        });
+
+        // Form submissions
+        document.getElementById('signinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            signIn(email, password);
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            signUp(username, email, password, confirmPassword);
+        });
+
+        // Active navigation link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelector('.nav-link.active').classList.remove('active');
+                this.classList.add('active');
+            });
+        });
+
+        // Initialize the app
+        initAuth();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93f3a636b4528488',t:'MTc0NzE1NDk2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>

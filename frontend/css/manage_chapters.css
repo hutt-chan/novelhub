@@ -1,0 +1,136 @@
+/* frontend/css/manageChapters.css */
+
+/* --- Specific styles for the Chapter Management Page --- */
+
+/* Adjustments for the table columns to ensure better alignment and readability */
+.chapter-list table {
+    table-layout: fixed; /* Ensures columns respect specified widths */
+    width: 100%;
+}
+
+.chapter-list th:nth-child(1),
+.chapter-list td:nth-child(1) {
+    width: 5%; /* ID */
+    text-align: center;
+}
+
+.chapter-list th:nth-child(2),
+.chapter-list td:nth-child(2) {
+    width: 8%; /* Novel ID */
+    text-align: center;
+}
+
+.chapter-list th:nth-child(3),
+.chapter-list td:nth-child(3) {
+    width: 25%; /* Tên Chương (Chapter Name) */
+}
+
+.chapter-list th:nth-child(4),
+.chapter-list td:nth-child(4) {
+    width: 15%; /* Ngày (Date) */
+    font-size: 0.95em;
+}
+
+.chapter-list th:nth-child(5),
+.chapter-list td:nth-child(5) {
+    width: 30%; /* Nội dung (tóm tắt) (Content Summary) */
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words */
+    font-size: 0.9em;
+    color: #666;
+}
+
+.chapter-list th:nth-child(6),
+.chapter-list td:nth-child(6) {
+    width: 17%; /* Hành động (Actions) */
+    text-align: center;
+    white-space: nowrap; /* Keep buttons on one line */
+}
+
+/* Fine-tuning for action buttons within the table */
+.chapter-list .actions-cell button {
+    margin: 2px;
+    padding: 6px 10px;
+    font-size: 0.85em;
+    min-width: 60px; /* Ensure buttons have a minimum width */
+}
+
+/* Responsive adjustments specific to the chapter table */
+@media (max-width: 768px) {
+    .chapter-list table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap; /* Prevent wrapping for the entire table on small screens */
+    }
+
+    .chapter-list thead,
+    .chapter-list tbody,
+    .chapter-list th,
+    .chapter-list td,
+    .chapter-list tr {
+        display: block;
+    }
+
+    .chapter-list thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .chapter-list tr {
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .chapter-list td {
+        border: none;
+        position: relative;
+        padding-left: 50%; /* Space for the label */
+        text-align: right;
+    }
+
+    .chapter-list td::before {
+        /* Create a pseudo-element for the label */
+        content: attr(data-label);
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        color: #555;
+    }
+
+    /* Apply specific labels for each column in the table cells */
+    .chapter-list td:nth-of-type(1)::before { content: "ID:"; }
+    .chapter-list td:nth-of-type(2)::before { content: "Novel ID:"; }
+    .chapter-list td:nth-of-type(3)::before { content: "Tên Chương:"; }
+    .chapter-list td:nth-of-type(4)::before { content: "Ngày:"; }
+    .chapter-list td:nth-of-type(5)::before { content: "Nội dung:"; }
+    .chapter-list td:nth-of-type(6)::before { content: "Hành động:"; }
+
+    .chapter-list .actions-cell {
+        text-align: right; /* Align buttons to the right */
+        padding-left: 0; /* Remove extra padding for actions */
+    }
+}
+
+/* Ensure modal inputs are full width on smaller screens */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 15px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: calc(100% - 20px); /* Adjust padding for smaller screens */
+        padding: 10px;
+    }
+    .modal .btn-primary {
+        padding: 10px;
+        font-size: 16px;
+    }
+}

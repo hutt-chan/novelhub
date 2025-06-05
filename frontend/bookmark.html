@@ -53,15 +53,21 @@
 
     <!-- Main Content -->
     <div class="main-content">
-      <!-- Auth Buttons -->
-      <div class="auth-container" id="authContainer"></div>
-      <!-- Favorites Section -->
-      <div id="bookmarks">
-        <h2 class="section-title">
-          <i class="fas fa-bookmark"></i>
-          Bookmarks
-        </h2>
-        <div id="bookmarkList" class="novel-list"></div>
+      <div class="header">
+        <div id="authContainer"></div>
+      </div>
+      <div class="bookmark-message" style="display: none; text-align: center; color: #7f8c8d; font-size: 1.2em; margin-top: 50px;">
+        Please sign in to view your bookmarks!
+      </div>
+      <div class="bookmark-content">
+        <!-- Favorites Section -->
+        <div id="bookmarks">
+          <h2 class="section-title">
+            <i class="fas fa-bookmark"></i>
+            Bookmarks
+          </h2>
+          <div id="bookmarkList" class="novel-list"></div>
+        </div>
       </div>
     </div>
     <script src="js/bookmarks.js"></script>

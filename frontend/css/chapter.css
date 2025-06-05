@@ -1,0 +1,10 @@
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
+  
+  .navigation .nav-btn:last-child {
+    margin-left: auto;
+  }
+  

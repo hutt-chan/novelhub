@@ -1,0 +1,26 @@
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #2563eb;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    background: none;
+    border: none;
+    margin-bottom: 18px;
+    margin-top: 18px;
+    margin-left: 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.back-btn:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+@media (max-width: 900px) {
+    .back-btn {
+        margin-top: 10px;
+        font-size: 1rem;
+    }
+}

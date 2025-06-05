@@ -1,26 +1,40 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Token không hợp lệ' });
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) {
+    return res
+      .status(401)
+      .json({ message: "Không có token xác thực được cung cấp." });
+  }
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Token không hợp lệ' });
-        req.user = user;
-        console.log('Decoded JWT payload (req.user):', user);
-        next();
-    });
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      console.error("Lỗi xác thực token:", err.message);
+      return res
+        .status(403)
+        .json({ message: "Token không hợp lệ hoặc đã hết hạn." });
+    }
+    req.user = user;
+    next();
+  });
 }
 
 function restrictTo(roles) {
-    return (req, res, next) => {
-        if (!req.user || !roles.includes(req.user.role)) {
-            return res.status(403).json({ error: 'Không có quyền truy cập' });
-        }
-        next();
-    };
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền truy cập chức năng này." });
+    }
+    next();
+  };
 }
 
-module.exports = { authenticateToken, restrictTo };
+module.exports = {
+  authenticateToken,
+  restrictTo,
+};

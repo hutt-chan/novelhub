@@ -1,122 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Novel Detail</title>
-    <link rel="stylesheet" href="css/test.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/test.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
     <!-- Sidebar (tương tự index.html) -->
     <div class="sidebar">
-        <div class="logo-container">
-            <div class="logo">
-                <i class="fas fa-book-open logo-icon"></i>
-                <span>NovelHub</span>
-            </div>
+      <div class="logo-container">
+        <div class="logo">
+          <i class="fas fa-book-open logo-icon"></i>
+          <span>NovelHub</span>
         </div>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link active">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="favorites.html" class="nav-link">
-                <i class="fas fa-heart"></i>
-                <span>Favorites</span>
-            </a>
-            <a href="history.html" class="nav-link">
-                <i class="fas fa-history"></i>
-                <span>History</span>
-            </a>
-            <a href="bookmark.html" class="nav-link">
-                <i class="fas fa-bookmark"></i>
-                <span>Bookmarks</span>
-            </a>
-            <a href="categories.html" class="nav-link">
-                <i class="fas fa-list"></i>
-                <span>Categories</span>
-            </a>
-            <a href="profile.html" class="nav-link">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="favorites.html" class="nav-link">
+          <i class="fas fa-heart"></i>
+          <span>Favorites</span>
+        </a>
+        <a href="history.html" class="nav-link">
+          <i class="fas fa-history"></i>
+          <span>History</span>
+        </a>
+        <a href="bookmark.html" class="nav-link">
+          <i class="fas fa-bookmark"></i>
+          <span>Bookmarks</span>
+        </a>
+        <a href="categories.html" class="nav-link">
+          <i class="fas fa-list"></i>
+          <span>Categories</span>
+        </a>
+        <a href="#" class="nav-link">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+      </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Auth Buttons -->
-        <div class="auth-container" id="authContainer"></div>
+      <!-- Nút Back -->
+      <a href="/frontend/index.html" class="back-btn" id="backBtn"
+        ><i class="fas fa-arrow-left"></i> Back</a
+      >
+      <!-- Auth Buttons -->
+      <div class="auth-container" id="authContainer"></div>
 
-        <!-- Novel Detail -->
-        <div class="novel-detail">
-            <h2 class="novel-title" id="novelTitle">Novel Title</h2>
-            <div class="novel-body">
-                <div class="novel-cover" id="novelCover"></div>
-                <div class="novel-info">
-                    <p class="novel-author" id="novelAuthor">By Author Name</p>
-                    <div class="novel-stats">
-                        <div class="novel-stat">
-                            <i class="fas fa-eye"></i>
-                            <span id="viewCount">0</span> Views
-                        </div>
-                        <div class="novel-stat">
-                            <i class="fas fa-star"></i>
-                            <span id="rating">0</span> Rating
-                        </div>
-                        <div class="novel-stat">
-                            <i class="fas fa-book"></i>
-                            <span id="chapterCount">0</span> Chapters
-                        </div>
-                        <div class="novel-stat">
-                            <i class="fas fa-heart"></i>
-                            <span id="favoriteCount">0</span> Favorites
-                        </div>
-                    </div>
-                    <div class="novel-genres" id="novelGenres"></div>
-                    <p class="novel-description" id="novelDescription"></p>
-                    <div class="novel-buttons">
-                        <button class="novel-btn primary-btn" id="startReadingBtn">
-                            <i class="fas fa-book-open"></i>
-                            Start Reading
-                        </button>
-                        <button class="novel-btn secondary-btn" id="bookmarkBtn">
-                            <i class="far fa-bookmark"></i>
-                            Add to Bookmarks
-                        </button>
-                        <button class="novel-btn secondary-btn" id="favoriteBtn">
-                            <i class="far fa-heart"></i>
-                            Add to Favorites
-                        </button>
-                    </div>
-                </div>
+      <!-- Novel Detail -->
+      <div class="novel-detail">
+        <h2 class="novel-title" id="novelTitle">Novel Title</h2>
+        <div class="novel-body">
+          <div class="novel-cover" id="novelCover"></div>
+          <div class="novel-info">
+            <p class="novel-author" id="novelAuthor">By Author Name</p>
+            <div class="novel-stats">
+              <div class="novel-stat">
+                <i class="fas fa-eye"></i>
+                <span id="viewCount">0</span> Views
+              </div>
+              <div class="novel-stat">
+                <i class="fas fa-star"></i>
+                <span id="rating">0</span> Rating
+              </div>
+              <div class="novel-stat">
+                <i class="fas fa-book"></i>
+                <span id="chapterCount">0</span> Chapters
+              </div>
+              <div class="novel-stat">
+                <i class="fas fa-heart"></i>
+                <span id="favoriteCount">0</span> Favorites
+              </div>
             </div>
-            <div class="novel-chapters">
-                <h3 class="chapters-title">Latest Chapters</h3>
-                <div class="chapter-list" id="chapterList"></div>
+            <div class="novel-genres" id="novelGenres"></div>
+            <p class="novel-description" id="novelDescription"></p>
+            <div class="novel-buttons">
+              <button class="novel-btn primary-btn" id="startReadingBtn">
+                <i class="fas fa-book-open"></i>
+                Start Reading
+              </button>
+              <button class="novel-btn secondary-btn" id="bookmarkBtn">
+                <i class="far fa-bookmark"></i>
+                Add to Bookmarks
+              </button>
+              <button class="novel-btn secondary-btn" id="favoriteBtn">
+                <i class="far fa-heart"></i>
+                Add to Favorites
+              </button>
             </div>
-            <div class="novel-comments">
-                <h3 class="comments-title">Comments</h3>
-                <form id="commentForm">
-                    <div class="form-group">
-                        <label for="commentContent" class="form-label">Comment</label>
-                        <textarea id="commentContent" class="form-input" placeholder="Write your comment..." required></textarea>
-                    </div>
-                    <!-- <div class="form-group">
-                        <label for="commentRating" class="form-label">Rating (1-5)</label>
-                        <input type="number" id="commentRating" class="form-input" min="1" max="5" required>
-                    </div> -->
-                    <button type="submit" class="form-submit">Submit Comment</button>
-                </form>
-                <div class="comment-list" id="commentList"></div>
-            </div>
+          </div>
         </div>
+        <div class="novel-chapters">
+          <h3 class="chapters-title">Chapters</h3>
+          <div class="chapter-list" id="chapterList"></div>
+        </div>
+        <div class="novel-comments">
+          <h3 class="comments-title">Comments</h3>
+          <form id="commentForm">
+            <div class="form-group">
+              <label for="commentContent" class="form-label">Comment</label>
+              <textarea
+                id="commentContent"
+                class="form-input"
+                placeholder="Write your comment..."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="commentRating" class="form-label">Rating (1-5)</label>
+              <select id="commentRating" class="form-input" required>
+                <option value="" disabled selected>Choose a rating</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <button type="submit" class="form-submit">Submit Comment</button>
+          </form>
+          <div class="comment-list" id="commentList"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/novel.js"></script>
-</body>
+    <script>
+      document
+        .getElementById("backBtn")
+        ?.addEventListener("click", function (e) {
+          e.preventDefault();
+          window.history.back();
+        });
+    </script>
+  </body>
 </html>
